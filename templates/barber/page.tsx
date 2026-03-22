@@ -20,8 +20,6 @@ export default async function BarberTemplate({ client }: { client: any }) {
   // Διάβασε από cms_sections αν υπάρχουν
 const sections = client.cms_sections || []
 const heroSection = sections.find((s: any) => s.type === 'hero')?.settings || {}
-console.log('cms_sections count:', sections.length)
-console.log('heroSection:', JSON.stringify(heroSection))
 const aboutSection = sections.find((s: any) => s.type === 'about')?.settings || {}
 const servicesSection = sections.find((s: any) => s.type === 'services')?.settings || {}
 const gallerySection = sections.find((s: any) => s.type === 'gallery')?.settings || {}
