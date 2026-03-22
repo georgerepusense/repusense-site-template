@@ -1,7 +1,4 @@
-// DIVING / ACTIVITY TEMPLATE
-// Deep Ocean aesthetic · Navy/Teal · Award-winning design
-// app/(site)/[clientId]/diving.tsx
-
+// DIVING TEMPLATE v2 — Full CMS2 Support
 import DivingAnimations from '@/components/site/DivingAnimations'
 import DivingReservationForm from '@/components/site/DivingReservationForm'
 import CookieBanner from '@/components/site/CookieBanner'
@@ -20,51 +17,79 @@ export default async function DivingTemplate({ client }: { client: any }) {
   const params = { clientId: client.id }
   const gbp = client.gbp_data || {}
   const cms = client.site_settings || {}
-  const photos = (gbp.photos || []).filter((p: any) => p?.url)
-  const reviews = (gbp.reviews || []).filter((r: any) => r?.text).slice(0, 6)
-  const articles: any[] = []
-  const todayHours = getTodayHours(gbp.hours)
 
-  const heroPhoto = cms.hero_photo || photos[0]?.url || null
-  const heroVideo = cms.hero_video || null
-  const heroImagePosition = cms.hero_image_position || 'center'
-  const rating = gbp.rating || null
+  // ── CMS2 sections ──
+  const sections = client.cms_sections || []
+  const heroSection     = sections.find((s: any) => s.type === 'hero')?.settings || {}
+  const aboutSection    = sections.find((s: any) => s.type === 'about')?.settings || {}
+  const coursesSection  = sections.find((s: any) => s.type === 'courses')?.settings || {}
+  const gallerySection  = sections.find((s: any) => s.type === 'gallery')?.settings || {}
+  const bookingSection  = sections.find((s: any) => s.type === 'booking')?.settings || {}
+  const infoSection     = sections.find((s: any) => s.type === 'info')?.settings || {}
+
+  // ── Base data ──
+  const photos      = (gbp.photos || []).filter((p: any) => p?.url)
+  const reviews     = (gbp.reviews || []).filter((r: any) => r?.text).slice(0, 6)
+  const articles    = client.articles || []
+  const todayHours  = getTodayHours(gbp.hours)
+  const rating      = gbp.rating || null
   const reviewCount = gbp.review_count || 0
-  const address = cms.address || gbp.address || ''
-  const phone = cms.phone || gbp.phone || ''
-  const instagram = cms.instagram_url || ''
-  const facebook = cms.facebook_url || ''
-  const whatsapp = cms.whatsapp || phone.replace(/\D/g, '')
-  const brandColor = cms.brand_color || '#0891b2'
-  const siteName = cms.hero_title || client.name
 
-  const courses = [1,2,3,4,5,6].map(i => ({
-    name: cms[`course_name_${i}`],
-    level: cms[`course_level_${i}`],
-    duration: cms[`course_duration_${i}`],
-    price: cms[`course_price_${i}`],
-    desc: cms[`course_desc_${i}`],
-  })).filter(c => c.name)
+  // ── Hero ──
+  const heroPhoto         = heroSection.photo || cms.hero_photo || photos[0]?.url || null
+  const heroVideo         = heroSection.video || cms.hero_video || null
+  const heroImagePosition = heroSection.image_position || cms.hero_image_position || 'center'
+  const brandColor        = heroSection.brand_color || cms.brand_color || '#0891b2'
+  const siteName          = heroSection.title || cms.hero_title || client.name
+  const heroEyebrow       = heroSection.eyebrow || cms.hero_eyebrow || gbp.category || 'Diving Center'
+  const heroDesc          = heroSection.desc || cms.hero_desc || 'Ανακάλυψε τον υποβρύχιο κόσμο με πιστοποιημένους εκπαιδευτές. PADI & SSI courses για όλα τα επίπεδα.'
+  const heroLine1         = heroSection.h1_line1 || cms.hero_h1_line1 || 'Κατάδυση'
+  const heroLine2         = heroSection.h1_line2 || cms.hero_h1_line2 || siteName
 
-  const galleryPhotos = [1,2,3,4,5,6,7,8,9]
-    .map(i => cms[`gallery_photo_${i}`])
-    .filter(Boolean)
+  // ── Contact ──
+  const address   = infoSection.address   || cms.address   || gbp.address || ''
+  const phone     = infoSection.phone     || cms.phone     || gbp.phone   || ''
+  const instagram = infoSection.instagram_url || cms.instagram_url || ''
+  const facebook  = infoSection.facebook_url  || cms.facebook_url  || ''
+  const whatsapp  = infoSection.whatsapp  || cms.whatsapp  || phone.replace(/\D/g, '')
+  const city      = address.split(',')[0]?.trim() || ''
 
-  const displayGallery = galleryPhotos.length > 0
-    ? galleryPhotos
-    : photos.slice(0, 9).map((p: any) => p.url)
-
+  // ── About ──
   const philosophy = {
-    title: cms.philosophy_title || 'Ανακάλυψε τον\nΚόσμο κάτω\nαπό την\nΕπιφάνεια.',
-    text: cms.philosophy_text || 'Η θάλασσα κρύβει έναν ολόκληρο κόσμο που λίγοι έχουν δει. Με πιστοποιημένους εκπαιδευτές και σύγχρονο εξοπλισμό, σε οδηγούμε με ασφάλεια στα βάθη της.',
-    photo: cms.philosophy_photo_1 || photos[1]?.url || null,
+    title: aboutSection.title   || cms.philosophy_title  || 'Ανακάλυψε τον\nΚόσμο κάτω\nαπό την\nΕπιφάνεια.',
+    text:  aboutSection.text    || cms.philosophy_text   || 'Η θάλασσα κρύβει έναν ολόκληρο κόσμο που λίγοι έχουν δει. Με πιστοποιημένους εκπαιδευτές και σύγχρονο εξοπλισμό, σε οδηγούμε με ασφάλεια στα βάθη της.',
+    photo: aboutSection.photo_1 || cms.philosophy_photo_1 || photos[1]?.url || null,
   }
 
+  // ── Courses ──
+  const courses = [1,2,3,4,5,6].map(i => ({
+    name:     coursesSection[`name_${i}`]     || cms[`course_name_${i}`],
+    level:    coursesSection[`level_${i}`]    || cms[`course_level_${i}`],
+    duration: coursesSection[`duration_${i}`] || cms[`course_duration_${i}`],
+    price:    coursesSection[`price_${i}`]    || cms[`course_price_${i}`],
+    desc:     coursesSection[`desc_${i}`]     || cms[`course_desc_${i}`],
+  })).filter(c => c.name)
+
+  // ── Gallery ──
+  const galleryPhotos = [1,2,3,4,5,6,7,8,9]
+    .map(i => gallerySection[`photo_${i}`] || cms[`gallery_photo_${i}`])
+    .filter(Boolean)
+  const displayGallery  = galleryPhotos.length > 0 ? galleryPhotos : photos.slice(0, 9).map((p: any) => p.url)
+  const galleryTitle    = gallerySection.title    || cms.gallery_title    || 'Κάτω από'
+  const galleryTitleEm  = gallerySection.title_em || cms.gallery_title_em || 'την Επιφάνεια'
+
+  // ── Booking ──
+  const ctaTitle = bookingSection.cta_title || cms.cta_title || 'Κλείσε\nΤη\nΚατάδυσή\nσου'
+  const feature1 = bookingSection.feature_1 || cms.feature_1 || 'PADI & SSI πιστοποιημένοι εκπαιδευτές'
+  const feature2 = bookingSection.feature_2 || cms.feature_2 || 'Μαθήματα για όλα τα επίπεδα'
+  const feature3 = bookingSection.feature_3 || cms.feature_3 || 'Εξοπλισμός παρέχεται'
+
+  // ── Stats ──
   const stats = [
     { num: cms.stat_1_num || '500+', label: cms.stat_1_label || 'Εκπαιδευμένοι Δύτες' },
-    { num: cms.stat_2_num || '15+', label: cms.stat_2_label || 'Χρόνια Εμπειρίας' },
-    { num: cms.stat_3_num || '20+', label: cms.stat_3_label || 'Dive Sites' },
-    { num: cms.stat_4_num || '98%', label: cms.stat_4_label || 'Ικανοποίηση' },
+    { num: cms.stat_2_num || '15+',  label: cms.stat_2_label || 'Χρόνια Εμπειρίας' },
+    { num: cms.stat_3_num || '20+',  label: cms.stat_3_label || 'Dive Sites' },
+    { num: cms.stat_4_num || '98%',  label: cms.stat_4_label || 'Ικανοποίηση' },
   ]
 
   return (
@@ -98,18 +123,15 @@ export default async function DivingTemplate({ client }: { client: any }) {
         img{display:block;max-width:100%;height:auto}
         a{text-decoration:none;color:inherit}
 
-        /* CURSOR */
         .cur{position:fixed;pointer-events:none;z-index:9999}
         .cur-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;transform:translate(-50%,-50%);position:absolute;transition:transform 0.15s}
         .cur-ring{width:32px;height:32px;border:1px solid rgba(8,145,178,0.5);border-radius:50%;transform:translate(-50%,-50%);position:absolute;transition:left 0.12s ease,top 0.12s ease}
         @media(hover:none){.cur{display:none}html{cursor:auto}}
 
-        /* BUBBLES */
         .bubbles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2}
         .bubble{position:absolute;bottom:-20px;border-radius:50%;background:rgba(8,145,178,0.15);border:1px solid rgba(8,145,178,0.3);animation:rise linear infinite}
         @keyframes rise{0%{transform:translateY(0) scale(1);opacity:0.6}100%{transform:translateY(-110vh) scale(0.3);opacity:0}}
 
-        /* NAV */
         .nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:2rem 5vw;transition:all 0.5s}
         .nav.stuck{padding:1.2rem 5vw;background:rgba(6,13,26,0.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--line)}
         .nav-brand{display:flex;flex-direction:column;gap:2px}
@@ -132,7 +154,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .mob-menu a:hover{color:var(--teal)}
         .mob-line{width:100%;height:1px;background:var(--line)}
 
-        /* HERO */
         .hero{height:100svh;min-height:600px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
         .hero-bg{position:absolute;inset:0}
         .hero-bg img,.hero-bg video{width:100%;height:100%;object-fit:cover;object-position:${heroImagePosition}}
@@ -154,19 +175,16 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .hero-scroll span{font-family:var(--f-mono);font-size:0.5rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--muted)}
         .hero-scroll-bar{width:1px;height:50px;background:linear-gradient(to bottom,var(--teal),transparent);animation:pulse 2s ease-in-out infinite}
 
-        /* DEPTH INDICATOR */
         .depth{position:absolute;right:5vw;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:0.5rem;opacity:0;animation:fu 1s 1.2s ease forwards}
         .depth-line{width:1px;height:120px;background:linear-gradient(to bottom,transparent,var(--teal),transparent);position:relative}
         .depth-num{font-family:var(--f-mono);font-size:0.55rem;letter-spacing:0.2em;color:var(--teal);writing-mode:vertical-rl}
         .depth-label{font-family:var(--f-mono);font-size:0.45rem;letter-spacing:0.3em;color:var(--muted);text-transform:uppercase;writing-mode:vertical-rl}
 
-        /* TICKER */
         .ticker{background:var(--teal);overflow:hidden;padding:0.65rem 0}
         .ticker-track{display:flex;white-space:nowrap;animation:tick 25s linear infinite}
         .ticker-item{font-family:var(--f-disp);font-size:0.9rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--navy);padding:0 3rem;opacity:0.85}
         .ticker-dot{opacity:0.4;margin:0 0.5rem}
 
-        /* STATS */
         .stats{background:var(--navy2);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
         .stat{padding:3rem 2rem;border-right:1px solid var(--line);position:relative;overflow:hidden;transition:background 0.4s}
         .stat:last-child{border-right:none}
@@ -175,14 +193,12 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .stat-num{font-family:var(--f-disp);font-size:clamp(2.5rem,4vw,4rem);font-weight:800;color:var(--teal);line-height:1;position:relative}
         .stat-label{font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-top:0.8rem;position:relative}
 
-        /* SECTIONS */
         .s{padding:8rem 5vw}
         .eyebrow{font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem}
         .eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--teal)}
         .h2{font-family:var(--f-disp);font-size:clamp(2.5rem,5vw,5.5rem);font-weight:800;line-height:0.92;letter-spacing:-0.01em;color:var(--white)}
         .h2 em{font-style:normal;color:var(--teal)}
 
-        /* REVEAL */
         .rv{opacity:0;transform:translateY(40px);transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1),transform 0.9s cubic-bezier(0.16,1,0.3,1)}
         .rv.in{opacity:1;transform:none}
         .rv-l{opacity:0;transform:translateX(-40px);transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1),transform 0.9s cubic-bezier(0.16,1,0.3,1)}
@@ -191,7 +207,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .rv-r.in{opacity:1;transform:none}
         .rv-d1{transition-delay:0.1s}.rv-d2{transition-delay:0.2s}.rv-d3{transition-delay:0.3s}.rv-d4{transition-delay:0.4s}
 
-        /* ABOUT */
         .about{background:var(--navy);display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
         .about-media{position:relative;overflow:hidden}
         .about-img{width:100%;height:100%;object-fit:cover;filter:saturate(0.8)}
@@ -203,7 +218,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .about-stat-num{font-family:var(--f-disp);font-size:2.5rem;font-weight:800;color:var(--teal);line-height:1}
         .about-stat-label{font-family:var(--f-mono);font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-top:0.4rem}
 
-        /* COURSES */
         .courses{background:var(--navy2)}
         .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:4rem}
         .course-card{background:var(--navy2);padding:2.5rem;position:relative;overflow:hidden;transition:background 0.4s;cursor:pointer}
@@ -218,7 +232,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .course-duration{font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase}
         .course-price{font-family:var(--f-disp);font-size:1.4rem;font-weight:700;color:var(--teal)}
 
-        /* GALLERY */
         .gal{background:var(--navy);padding:8rem 0}
         .gal-head{padding:0 5vw;margin-bottom:3rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
         .gal-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto;gap:3px;padding:0 5vw}
@@ -230,7 +243,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .gal-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,145,178,0.3) 0%,transparent 50%);opacity:0;transition:opacity 0.4s}
         .gal-item:hover .gal-overlay{opacity:1}
 
-        /* REVIEWS */
         .revs{background:var(--navy2)}
         .revs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:4rem}
         .rev{background:var(--navy2);padding:2.5rem;position:relative;overflow:hidden}
@@ -239,7 +251,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .rev-text{font-size:0.9rem;line-height:1.85;color:rgba(240,248,255,0.75);font-style:italic;margin-bottom:2rem;font-weight:300}
         .rev-author{font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--teal)}
 
-        /* BOOKING */
         .book{background:var(--navy);display:grid;grid-template-columns:1fr 1fr;min-height:80vh;position:relative;overflow:hidden}
         .book::before{content:'';position:absolute;top:-20%;left:-10%;width:60%;height:140%;background:radial-gradient(ellipse,rgba(8,145,178,0.08) 0%,transparent 70%);pointer-events:none}
         .book-left{padding:7rem 5vw;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
@@ -252,11 +263,9 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .book-feature-text{font-size:0.85rem;color:var(--muted);font-weight:300}
         .book-right{padding:7rem 5vw;display:flex;flex-direction:column;justify-content:center;border-left:1px solid var(--line);position:relative;z-index:1}
 
-        /* BLOG */
         .blog-card{display:block;background:var(--navy2);transition:background 0.3s}
         .blog-card:hover{background:var(--navy3)}
 
-        /* FOOTER */
         .foot{background:#020810;padding:5rem 5vw 3rem;border-top:1px solid var(--line)}
         .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:4rem;padding-bottom:4rem;border-bottom:1px solid var(--line)}
         .foot-brand{font-family:var(--f-disp);font-size:1.8rem;font-weight:800;color:var(--white)}
@@ -275,17 +284,14 @@ export default async function DivingTemplate({ client }: { client: any }) {
         .foot-legal a{font-family:var(--f-mono);font-size:0.52rem;color:rgba(240,248,255,0.2);transition:color 0.3s}
         .foot-legal a:hover{color:var(--muted)}
 
-        /* WA */
         .wa{position:fixed;bottom:2rem;right:2rem;z-index:300;width:52px;height:52px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.3);transition:transform 0.3s}
         .wa:hover{transform:scale(1.08)}
         .wa svg{width:24px;height:24px;fill:white}
 
-        /* KEYFRAMES */
         @keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
         @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
-        /* MOBILE */
         @media(max-width:900px){
           html{cursor:auto}
           .cur{display:none}
@@ -306,6 +312,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
           .about-img-placeholder{min-height:300px}
           .about-content{border-left:none;border-top:1px solid var(--line);padding:4rem 5vw}
           .courses-grid{grid-template-columns:1fr}
+          .gal{padding:4rem 0}
           .gal-grid{grid-template-columns:1fr 1fr;padding:0 4vw}
           .gal-item:nth-child(1){grid-column:span 2}
           .revs-grid{grid-template-columns:1fr}
@@ -327,13 +334,11 @@ export default async function DivingTemplate({ client }: { client: any }) {
 
       <DivingAnimations />
 
-      {/* CURSOR */}
       <div className="cur" id="d-cur">
         <div className="cur-dot" id="d-dot"/>
         <div className="cur-ring" id="d-ring"/>
       </div>
 
-      {/* MOBILE MENU */}
       <div className="mob-menu" id="d-mob">
         <div className="mob-line"/>
         <a href="#about">Σχετικά</a>
@@ -346,11 +351,10 @@ export default async function DivingTemplate({ client }: { client: any }) {
         <div className="mob-line"/>
       </div>
 
-      {/* NAV */}
       <nav className="nav" id="d-nav">
         <div className="nav-brand">
           <span className="nav-brand-name">{siteName}</span>
-          <span className="nav-brand-tag">{cms.hero_eyebrow || 'Diving Center'}</span>
+          <span className="nav-brand-tag">{heroEyebrow}</span>
         </div>
         <div className="nav-links">
           <a href="#about" className="nav-a">Σχετικά</a>
@@ -363,8 +367,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </button>
       </nav>
 
-      {/* HERO */}
-      <section className="hero">
+      <section className="hero" aria-label="Hero">
         <div className="hero-bg">
           {heroVideo ? (
             <video autoPlay muted loop playsInline>
@@ -372,7 +375,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
               {heroPhoto && <img src={heroPhoto} alt={siteName} fetchPriority="high"/>}
             </video>
           ) : heroPhoto ? (
-            <img src={heroPhoto} alt={`${siteName} - ${gbp.category || 'Diving Center'} - ${address}`} fetchPriority="high" decoding="async" style={{objectPosition: heroImagePosition}}/>
+            <img src={heroPhoto} alt={`${siteName} - ${heroEyebrow} - ${address}`} fetchPriority="high" decoding="async" style={{objectPosition:heroImagePosition}}/>
           ) : (
             <div style={{width:'100%',height:'100%',background:'linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%)'}}/>
           )}
@@ -380,34 +383,29 @@ export default async function DivingTemplate({ client }: { client: any }) {
         <div className="hero-gradient"/>
         <div className="hero-gradient2"/>
         <div className="bubbles" id="d-bubbles"/>
-
-        {/* Depth indicator */}
         <div className="depth">
           <div className="depth-num">40m</div>
           <div className="depth-line" id="d-depth"/>
           <div className="depth-label">depth</div>
         </div>
-
         <div className="hero-content">
           <div className="hero-eyebrow">
             <div className="hero-eyebrow-line"/>
-            {cms.hero_eyebrow || gbp.category || 'Diving Center'}
+            {heroEyebrow}
           </div>
           <h1 className="hero-h1">
-            {(cms.hero_h1_line1 || 'Κατάδυση').split('').map((char: string, i: number) => (
+            {heroLine1.split('').map((char: string, i: number) => (
               <span key={i} style={{display:'inline-block'}}>{char === ' ' ? '\u00A0' : char}</span>
             ))}
             <br/>
             <span style={{color:'var(--teal)'}}>
-              {(cms.hero_h1_line2 || siteName).split('').map((char: string, i: number) => (
+              {heroLine2.split('').map((char: string, i: number) => (
                 <span key={i} style={{display:'inline-block'}}>{char === ' ' ? '\u00A0' : char}</span>
               ))}
             </span>
           </h1>
           <div className="hero-bottom">
-            <p className="hero-desc">
-              {cms.hero_desc || 'Ανακάλυψε τον υποβρύχιο κόσμο με πιστοποιημένους εκπαιδευτές. PADI & SSI courses για όλα τα επίπεδα.'}
-            </p>
+            <p className="hero-desc">{heroDesc}</p>
             <div className="hero-meta">
               {rating && (
                 <div className="hero-rating-box">
@@ -427,7 +425,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </div>
       </section>
 
-      {/* TICKER */}
       <div className="ticker">
         <div className="ticker-track">
           {[...Array(8)].map((_,i) => (
@@ -445,7 +442,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </div>
       </div>
 
-      {/* STATS */}
       <div className="stats">
         {stats.map((s, i) => (
           <div key={i} className="stat rv">
@@ -455,12 +451,11 @@ export default async function DivingTemplate({ client }: { client: any }) {
         ))}
       </div>
 
-      {/* ABOUT */}
       <section className="about" id="about" aria-label="Σχετικά με εμάς">
         <div className="about-media rv-l" style={{position:'relative'}}>
           {philosophy.photo ? (
             <>
-              <img src={philosophy.photo} alt={`${siteName} - Diving Center ${address}`} className="about-img" loading="lazy" style={{position:'absolute',inset:0,width:'100%',height:'100%'}}/>
+              <img src={philosophy.photo} alt={`${siteName} - Diving Center ${city}`} className="about-img" loading="lazy" style={{position:'absolute',inset:0,width:'100%',height:'100%'}}/>
               <div className="about-overlay"/>
             </>
           ) : (
@@ -475,7 +470,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
           <div className="eyebrow">Ποιοι Είμαστε</div>
           <h2 className="h2">
             {philosophy.title.split('\n').map((line: string, i: number) => (
-              <span key={i} style={{display:'block', color: i===1 ? 'var(--teal)' : 'var(--white)'}}>{line}</span>
+              <span key={i} style={{display:'block',color:i===1?'var(--teal)':'var(--white)'}}>{line}</span>
             ))}
           </h2>
           <p className="about-body">{philosophy.text}</p>
@@ -502,7 +497,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </div>
       </section>
 
-      {/* COURSES */}
       {courses.length > 0 && (
         <section className="courses s" id="courses" aria-label="Μαθήματα κατάδυσης">
           <div className="rv">
@@ -526,13 +520,12 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </section>
       )}
 
-      {/* GALLERY */}
       {displayGallery.length > 0 && (
         <section className="gal" id="gallery" aria-label="Gallery φωτογραφιών">
           <div className="gal-head rv">
             <div>
               <div className="eyebrow">Gallery</div>
-              <h2 className="h2">{cms.gallery_title || 'Κάτω από'} <em>{cms.gallery_title_em || 'την Επιφάνεια'}</em></h2>
+              <h2 className="h2">{galleryTitle} <em>{galleryTitleEm}</em></h2>
             </div>
             <span style={{fontFamily:'var(--f-mono)',fontSize:'0.55rem',letterSpacing:'0.3em',color:'var(--muted)',textTransform:'uppercase',alignSelf:'flex-end'}}>
               {displayGallery.length} photos
@@ -541,7 +534,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
           <div className="gal-grid rv rv-d1">
             {displayGallery.slice(0, 6).map((url: string, i: number) => (
               <div key={i} className="gal-item">
-                <img src={url} alt={`${siteName} - Κατάδυση ${address} - φωτογραφία ${i+1}`} className="gal-img" loading="lazy"/>
+                <img src={url} alt={`${siteName} - Κατάδυση ${city} - φωτογραφία ${i+1}`} className="gal-img" loading="lazy"/>
                 <div className="gal-overlay"/>
               </div>
             ))}
@@ -549,7 +542,6 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </section>
       )}
 
-      {/* REVIEWS */}
       {reviews.length > 0 && (
         <section className="revs s" id="reviews" aria-label="Κριτικές πελατών">
           <div className="rv">
@@ -568,16 +560,15 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </section>
       )}
 
-      {/* BLOG */}
       {articles.length > 0 && (
-        <section className="s" style={{background:'var(--navy)',paddingTop:0}} id="blog">
+        <section className="s" style={{background:'var(--navy2)'}} id="blog" aria-label="Blog">
           <div className="rv">
             <div className="eyebrow">Άρθρα & Νέα</div>
             <h2 className="h2">Τα Νέα <em>μας</em></h2>
           </div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1px',background:'var(--line)',marginTop:'3rem'}}>
             {articles.map((a:any,i:number) => (
-              <a key={a.id} href={`/${params.clientId}/blog/${a.id}`} className={`blog-card rv rv-d${Math.min(i+1,3)}`}>
+              <a key={a.id} href={`/blog/${a.id}`} className={`blog-card rv rv-d${Math.min(i+1,3)}`}>
                 {a.featured_image_url && (
                   <img src={a.featured_image_url} alt={a.title} loading="lazy"
                     style={{width:'100%',aspectRatio:'16/9',objectFit:'cover',filter:'saturate(0.7)',display:'block'}}/>
@@ -586,7 +577,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
                   <div style={{fontFamily:'var(--f-mono)',fontSize:'0.52rem',letterSpacing:'0.3em',color:'var(--muted)',textTransform:'uppercase',marginBottom:'0.8rem'}}>
                     {new Date(a.created_at).toLocaleDateString('el-GR',{day:'numeric',month:'long',year:'numeric'})}
                   </div>
-                  <div style={{fontFamily:'var(--f-disp)',fontSize:'1.2rem',fontWeight:'700',color:'var(--white)',lineHeight:1.2}}>
+                  <div style={{fontFamily:'var(--f-disp)',fontSize:'1.2rem',fontWeight:700,color:'var(--white)',lineHeight:1.2}}>
                     {a.title}
                   </div>
                 </div>
@@ -596,20 +587,19 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </section>
       )}
 
-      {/* BOOKING */}
       <section className="book" id="booking" aria-label="Κράτηση κατάδυσης">
         <div className="book-left rv-l">
           <h2 className="book-title">
-            {(cms.cta_title || 'Κλείσε\nΤη\nΚατάδυσή\nσου').split('\n').map((l:string,i:number) => (
+            {ctaTitle.split('\n').map((l:string,i:number) => (
               <span key={i} style={{display:'block',color:i===1?'var(--teal)':'var(--white)'}}>{l}</span>
             ))}
           </h2>
           <p className="book-sub">{todayHours || 'Καθημερινά'}</p>
           <div className="book-features">
             {[
-              { icon:'🤿', text: cms.feature_1 || 'PADI & SSI πιστοποιημένοι εκπαιδευτές' },
-              { icon:'🎓', text: cms.feature_2 || 'Μαθήματα για όλα τα επίπεδα' },
-              { icon:'⚓', text: cms.feature_3 || 'Εξοπλισμός παρέχεται' },
+              { icon:'🤿', text: feature1 },
+              { icon:'🎓', text: feature2 },
+              { icon:'⚓', text: feature3 },
             ].map((f, i) => (
               <div key={i} className="book-feature">
                 <div className="book-feature-icon">
@@ -631,13 +621,12 @@ export default async function DivingTemplate({ client }: { client: any }) {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="foot">
         <div className="foot-top">
           <div>
             <div className="foot-brand">{siteName}</div>
-            <div className="foot-tagline">{cms.hero_eyebrow || gbp.category || 'Diving Center'}</div>
-            <p className="foot-desc">{cms.footer_desc || philosophy.text.slice(0, 120) + '…'}</p>
+            <div className="foot-tagline">{heroEyebrow}</div>
+            <p className="foot-desc">{philosophy.text.slice(0, 120)}…</p>
             <div className="foot-social">
               {instagram && (
                 <a href={instagram} target="_blank" rel="noopener noreferrer" className="foot-soc" aria-label="Instagram">
@@ -673,8 +662,8 @@ export default async function DivingTemplate({ client }: { client: any }) {
         <div className="foot-bottom">
           <span className="foot-copy">© {new Date().getFullYear()} {siteName}. All rights reserved.</span>
           <div className="foot-legal">
-            <a href={`/${params.clientId}/privacy`}>Πολιτική Απορρήτου</a>
-            <a href={`/${params.clientId}/cookies`}>Cookies</a>
+            <a href="/privacy">Πολιτική Απορρήτου</a>
+            <a href="/cookies">Cookies</a>
           </div>
         </div>
       </footer>
