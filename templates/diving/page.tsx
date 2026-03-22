@@ -372,7 +372,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
               {heroPhoto && <img src={heroPhoto} alt={siteName} fetchPriority="high"/>}
             </video>
           ) : heroPhoto ? (
-            <img src={heroPhoto} alt={siteName} fetchPriority="high" decoding="async" style={{objectPosition: heroImagePosition}}/>
+            <img src={heroPhoto} alt={`${siteName} - ${gbp.category || 'Diving Center'} - ${address}`} fetchPriority="high" decoding="async" style={{objectPosition: heroImagePosition}}/>
           ) : (
             <div style={{width:'100%',height:'100%',background:'linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%)'}}/>
           )}
@@ -456,11 +456,11 @@ export default async function DivingTemplate({ client }: { client: any }) {
       </div>
 
       {/* ABOUT */}
-      <section className="about" id="about">
+      <section className="about" id="about" aria-label="Σχετικά με εμάς">
         <div className="about-media rv-l" style={{position:'relative'}}>
           {philosophy.photo ? (
             <>
-              <img src={philosophy.photo} alt={siteName} className="about-img" loading="lazy" style={{position:'absolute',inset:0,width:'100%',height:'100%'}}/>
+              <img src={philosophy.photo} alt={`${siteName} - Diving Center ${address}`} className="about-img" loading="lazy" style={{position:'absolute',inset:0,width:'100%',height:'100%'}}/>
               <div className="about-overlay"/>
             </>
           ) : (
@@ -504,7 +504,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
 
       {/* COURSES */}
       {courses.length > 0 && (
-        <section className="courses s" id="courses">
+        <section className="courses s" id="courses" aria-label="Μαθήματα κατάδυσης">
           <div className="rv">
             <div className="eyebrow">Μαθήματα</div>
             <h2 className="h2">Διάλεξε το <em>Course</em> σου</h2>
@@ -528,7 +528,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
 
       {/* GALLERY */}
       {displayGallery.length > 0 && (
-        <section className="gal" id="gallery">
+        <section className="gal" id="gallery" aria-label="Gallery φωτογραφιών">
           <div className="gal-head rv">
             <div>
               <div className="eyebrow">Gallery</div>
@@ -541,7 +541,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
           <div className="gal-grid rv rv-d1">
             {displayGallery.slice(0, 6).map((url: string, i: number) => (
               <div key={i} className="gal-item">
-                <img src={url} alt={`${siteName} ${i+1}`} className="gal-img" loading="lazy"/>
+                <img src={url} alt={`${siteName} - Κατάδυση ${address} - φωτογραφία ${i+1}`} className="gal-img" loading="lazy"/>
                 <div className="gal-overlay"/>
               </div>
             ))}
@@ -551,7 +551,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
 
       {/* REVIEWS */}
       {reviews.length > 0 && (
-        <section className="revs s" id="reviews">
+        <section className="revs s" id="reviews" aria-label="Κριτικές πελατών">
           <div className="rv">
             <div className="eyebrow">Κριτικές</div>
             <h2 className="h2">Τι Λένε <em>οι Δύτες</em></h2>
@@ -597,7 +597,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
       )}
 
       {/* BOOKING */}
-      <section className="book" id="booking">
+      <section className="book" id="booking" aria-label="Κράτηση κατάδυσης">
         <div className="book-left rv-l">
           <h2 className="book-title">
             {(cms.cta_title || 'Κλείσε\nΤη\nΚατάδυσή\nσου').split('\n').map((l:string,i:number) => (

@@ -332,7 +332,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
               <source src={heroVideo} type="video/mp4"/>
             </video>
           ) : heroPhoto ? (
-            <img src={heroPhoto} alt={siteName} className="hero-left-img" fetchPriority="high" decoding="async"/>
+            <img src={heroPhoto} alt={`${siteName} - ${gbp.category || 'Barber Shop'} - ${address}`} className="hero-left-img" fetchPriority="high" decoding="async"/>
           ) : (
             <div style={{position:'absolute',inset:0,background:'var(--gray2)',display:'flex',alignItems:'center',justifyContent:'center'}}>
               <span style={{fontFamily:'var(--f-disp)',fontSize:'8rem',color:'rgba(245,242,238,0.05)'}}>✂</span>
@@ -392,7 +392,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
       </div>
 
       {/* ABOUT */}
-      <section className="about" id="about">
+      <section className="about" id="about" aria-label="Σχετικά με εμάς">
         <div className="about-media rv-l">
           <div className="about-media-inner">
             {philosophy.photo ? (
@@ -444,7 +444,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
 
       {/* SERVICES */}
       {services.length > 0 && (
-        <section className="svs s" id="services">
+        <section className="svs s" id="services" aria-label="Υπηρεσίες">
           <div className="svs-head rv">
             <div>
               <div className="eyebrow">Υπηρεσίες</div>
@@ -474,7 +474,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
 
       {/* GALLERY */}
       {displayGallery.length > 0 && (
-        <section className="gal" id="gallery">
+        <section className="gal" id="gallery" aria-label="Gallery">
           <div className="gal-head rv">
             <div>
               <div className="eyebrow">Gallery</div>
@@ -487,7 +487,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
           <div className="gal-grid rv rv-d1">
             {displayGallery.slice(0, 6).map((url: string, i: number) => (
               <div key={i} className="gal-item">
-                <img src={url} alt={`${siteName} ${i+1}`} className="gal-img" loading="lazy"/>
+                <img src={url} alt={`${siteName} - ${gbp.category || 'Barber Shop'} ${city} - φωτογραφία ${i+1}`} className="gal-img" loading="lazy"/>
               </div>
             ))}
           </div>
@@ -496,7 +496,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
 
       {/* REVIEWS */}
       {reviews.length > 0 && (
-        <section className="revs s" id="reviews">
+        <section className="revs s" id="reviews" aria-label="Κριτικές">
           <div className="revs-head rv">
             <div className="eyebrow">Κριτικές</div>
             <h2 className="h2">Τι Λένε <em>οι Πελάτες</em></h2>
@@ -514,7 +514,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
       )}
 
       {/* BOOKING */}
-      <section className="book" id="booking">
+      <section className="book" id="booking" aria-label="Κράτηση ραντεβού">
         <div className="book-left rv-l">
           <h2 className="book-title">ΚΛΕΙΣΕ<br/>ΡΑΝΤΕΒΟΥ<br/>ΣΗΜΕΡΑ</h2>
           <p className="book-sub">{todayHours || 'Δευτέρα — Σάββατο'}</p>
