@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 // app/[location]/page.tsx
 // Programmatic SEO — αυτόματες landing pages ανά τοποθεσία
 import { getClientData } from '@/lib/repusense'

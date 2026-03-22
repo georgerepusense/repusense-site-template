@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 // app/sitemap.ts
 import { MetadataRoute } from 'next'
 import { getClientData } from '@/lib/repusense'

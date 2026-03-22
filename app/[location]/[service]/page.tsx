@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 // app/[location]/[service]/page.tsx
 // Programmatic SEO — location + service pages
 // π.χ. /αθηνα/κουρεμα, /γλυφαδα/ξυρισμα, /αθηνα/open-water-diving

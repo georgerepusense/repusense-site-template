@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 // app/page.tsx
 import { getClientData } from '@/lib/repusense'
 import { generateSEO, generateSchema } from '@/lib/seo'
