@@ -33,6 +33,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
   const todayHours  = getTodayHours(gbp.hours)
   const rating      = gbp.rating || null
   const reviewCount = gbp.review_count || 0
+  const articles = client.articles || []
 
   // ── Hero ──
   const heroPhoto        = heroSection.photo || cms.hero_photo || photos[0]?.url || null
@@ -514,6 +515,32 @@ export default async function BarberTemplate({ client }: { client: any }) {
         </section>
       )}
 
+      {articles.length > 0 && (
+  <section className="s" style={{background:'var(--gray)'}} id="blog">
+    <div className="rv">
+      <div className="eyebrow">Άρθρα & Νέα</div>
+      <h2 className="h2">Τα Νέα <em>μας</em></h2>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1px',background:'var(--line)',marginTop:'3rem'}}>
+      {articles.map((a:any,i:number) => (
+        <a key={a.id} href={`/blog/${a.id}`} className={`blog-card rv rv-d${Math.min(i+1,3)}`}>
+          {a.featured_image_url && (
+            <img src={a.featured_image_url} alt={a.title} loading="lazy"
+              style={{width:'100%',aspectRatio:'16/9',objectFit:'cover',display:'block'}}/>
+          )}
+          <div style={{padding:'1.5rem 2rem'}}>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'0.52rem',letterSpacing:'0.3em',color:'rgba(245,242,238,0.3)',textTransform:'uppercase',marginBottom:'0.8rem'}}>
+              {new Date(a.created_at).toLocaleDateString('el-GR',{day:'numeric',month:'long',year:'numeric'})}
+            </div>
+            <div style={{fontFamily:'var(--f-disp)',fontSize:'1.2rem',color:'var(--white)',lineHeight:1.2}}>
+              {a.title}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+)}
       <section className="book" id="booking" aria-label="Κράτηση ραντεβού">
         <div className="book-left rv-l">
           <h2 className="book-title">
