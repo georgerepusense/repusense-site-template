@@ -26,6 +26,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
   const rating = gbp.rating || null
   const reviewCount = gbp.review_count || 0
   const address = cms.address || gbp.address || ''
+  const city = address.split(',')[0]?.trim() || ''
   const phone = cms.phone || gbp.phone || ''
   const instagram = cms.instagram_url || ''
   const facebook = cms.facebook_url || ''
@@ -79,7 +80,7 @@ export default async function BarberTemplate({ client }: { client: any }) {
         html{scroll-behavior:smooth;cursor:none}
         body{font-family:var(--f-body);background:var(--black);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
         ::selection{background:var(--gold);color:var(--black)}
-        img{display:block;max-width:100%}
+        img{display:block;max-width:100%;height:auto}
         a{text-decoration:none;color:inherit}
 
         /* CURSOR */

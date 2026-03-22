@@ -95,7 +95,7 @@ export default async function DivingTemplate({ client }: { client: any }) {
         html{scroll-behavior:smooth;cursor:none}
         body{font-family:var(--f-body);background:var(--navy);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
         ::selection{background:var(--teal);color:var(--navy)}
-        img{display:block;max-width:100%}
+        img{display:block;max-width:100%;height:auto}
         a{text-decoration:none;color:inherit}
 
         /* CURSOR */
