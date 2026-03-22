@@ -1,4 +1,4 @@
-// BARBER TEMPLATE v2 — Fixed Mobile
+// BARBER TEMPLATE v3 — Full CMS2 Support
 import BarberAnimations from '@/components/site/BarberAnimations'
 import BarberReservationForm from '@/components/site/BarberReservationForm'
 import CookieBanner from '@/components/site/CookieBanner'
@@ -17,55 +17,66 @@ export default async function BarberTemplate({ client }: { client: any }) {
   const params = { clientId: client.id }
   const gbp = client.gbp_data || {}
   const cms = client.site_settings || {}
-  // Διάβασε από cms_sections αν υπάρχουν
-const sections = client.cms_sections || []
-const heroSection = sections.find((s: any) => s.type === 'hero')?.settings || {}
-const aboutSection = sections.find((s: any) => s.type === 'about')?.settings || {}
-const servicesSection = sections.find((s: any) => s.type === 'services')?.settings || {}
-const gallerySection = sections.find((s: any) => s.type === 'gallery')?.settings || {}
-const bookingSection = sections.find((s: any) => s.type === 'booking')?.settings || {}
-const infoSection = sections.find((s: any) => s.type === 'info')?.settings || {}
-const cmsSeo = client.cms_seo || {}
 
-// Merge — cms_sections έχει προτεραιότητα, fallback στο παλιό site_settings
-  const photos = (gbp.photos || []).filter((p: any) => p?.url)
-  const heroPhoto = heroSection.photo || cms.hero_photo || photos[0]?.url || null
-const heroVideo = heroSection.video || cms.hero_video || null
-const heroImagePosition = heroSection.image_position || cms.hero_image_position || 'center'
-const brandColor = heroSection.brand_color || cms.brand_color || '#c8b89a'
-const siteName = heroSection.title || cms.hero_title || client.name
-  const reviews = (gbp.reviews || []).filter((r: any) => r?.text).slice(0, 6)
-  const todayHours = getTodayHours(gbp.hours)
+  // ── CMS2 sections ──
+  const sections = client.cms_sections || []
+  const heroSection     = sections.find((s: any) => s.type === 'hero')?.settings || {}
+  const aboutSection    = sections.find((s: any) => s.type === 'about')?.settings || {}
+  const servicesSection = sections.find((s: any) => s.type === 'services')?.settings || {}
+  const gallerySection  = sections.find((s: any) => s.type === 'gallery')?.settings || {}
+  const bookingSection  = sections.find((s: any) => s.type === 'booking')?.settings || {}
+  const infoSection     = sections.find((s: any) => s.type === 'info')?.settings || {}
 
-  const rating = gbp.rating || null
+  // ── Base data ──
+  const photos      = (gbp.photos || []).filter((p: any) => p?.url)
+  const reviews     = (gbp.reviews || []).filter((r: any) => r?.text).slice(0, 6)
+  const todayHours  = getTodayHours(gbp.hours)
+  const rating      = gbp.rating || null
   const reviewCount = gbp.review_count || 0
-  const address = cms.address || gbp.address || ''
-  const city = address.split(',')[0]?.trim() || ''
-  const phone = cms.phone || gbp.phone || ''
-  const instagram = cms.instagram_url || ''
-  const facebook = cms.facebook_url || ''
-  const whatsapp = cms.whatsapp || phone.replace(/\D/g, '')
 
+  // ── Hero ──
+  const heroPhoto        = heroSection.photo || cms.hero_photo || photos[0]?.url || null
+  const heroVideo        = heroSection.video || cms.hero_video || null
+  const heroImagePosition = heroSection.image_position || cms.hero_image_position || 'center'
+  const brandColor       = heroSection.brand_color || cms.brand_color || '#c8b89a'
+  const siteName         = heroSection.title || cms.hero_title || client.name
+  const heroEyebrow      = heroSection.eyebrow || cms.hero_eyebrow || gbp.category || 'Barber Shop'
+
+  // ── Contact ──
+  const address   = infoSection.address   || cms.address   || gbp.address || ''
+  const phone     = infoSection.phone     || cms.phone     || gbp.phone   || ''
+  const instagram = infoSection.instagram_url || cms.instagram_url || ''
+  const facebook  = infoSection.facebook_url  || cms.facebook_url  || ''
+  const whatsapp  = infoSection.whatsapp  || cms.whatsapp  || phone.replace(/\D/g, '')
+  const city      = address.split(',')[0]?.trim() || ''
+
+  // ── About ──
+  const philosophy = {
+    title:  aboutSection.title   || cms.philosophy_title  || 'Precision.\nCraft.\nIdentity.',
+    text:   aboutSection.text    || cms.philosophy_text   || 'Δεν κάνουμε απλώς κουρέματα. Σχεδιάζουμε την εικόνα σου. Κάθε λεπτομέρεια έχει σημασία.',
+    photo:  aboutSection.photo_1 || cms.philosophy_photo_1 || photos[1]?.url || null,
+    photo2: aboutSection.photo_2 || cms.philosophy_photo_2 || photos[2]?.url || null,
+  }
+
+  // ── Services ──
   const services = [1,2,3,4,5,6,7,8].map(i => ({
-    name: servicesSection[`name_${i}`] || cms[`service_name_${i}`],
-    price: servicesSection[`price_${i}`] || cms[`service_price_${i}`],
+    name:     servicesSection[`name_${i}`]     || cms[`service_name_${i}`],
+    price:    servicesSection[`price_${i}`]    || cms[`service_price_${i}`],
     duration: servicesSection[`duration_${i}`] || cms[`service_duration_${i}`],
   })).filter(s => s.name)
 
+  // ── Gallery ──
   const galleryPhotos = [1,2,3,4,5,6,7,8,9]
     .map(i => gallerySection[`photo_${i}`] || cms[`gallery_photo_${i}`])
     .filter(Boolean)
-
   const displayGallery = galleryPhotos.length > 0
     ? galleryPhotos
     : photos.slice(0, 9).map((p: any) => p.url)
+  const galleryTitle   = gallerySection.title    || cms.gallery_title    || 'Η Δουλειά'
+  const galleryTitleEm = gallerySection.title_em || cms.gallery_title_em || 'Μιλά'
 
-  const philosophy = {
-    title: cms.philosophy_title || 'Precision.\nCraft.\nIdentity.',
-    text: cms.philosophy_text || 'Δεν κάνουμε απλώς κουρέματα. Σχεδιάζουμε την εικόνα σου. Κάθε λεπτομέρεια έχει σημασία — από την πρώτη κίνηση της ψαλίδας μέχρι το τελικό αποτέλεσμα.',
-    photo: cms.philosophy_photo_1 || photos[1]?.url || null,
-    photo2: cms.philosophy_photo_2 || photos[2]?.url || null,
-  }
+  // ── Booking ──
+  const ctaTitle = bookingSection.cta_title || cms.cta_title || 'ΚΛΕΙΣΕ\nΡΑΝΤΕΒΟΥ\nΣΗΜΕΡΑ'
 
   return (
     <>
@@ -95,13 +106,11 @@ const siteName = heroSection.title || cms.hero_title || client.name
         img{display:block;max-width:100%;height:auto}
         a{text-decoration:none;color:inherit}
 
-        /* CURSOR */
         .cur{position:fixed;pointer-events:none;z-index:9999}
         .cur-dot{width:32px;height:32px;background:none;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;position:absolute}
         .cur-ring{display:none;position:absolute}
         @media(hover:none){.cur{display:none}html{cursor:auto}}
 
-        /* NAV */
         .nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:2rem 5vw;transition:padding 0.5s,background 0.5s}
         .nav.stuck{padding:1.2rem 5vw;background:rgba(8,8,8,0.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line)}
         .nav-brand{font-family:var(--f-disp);font-size:1.5rem;letter-spacing:0.12em;color:var(--white)}
@@ -116,17 +125,15 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .nav-burger.on span:nth-child(2){opacity:0;transform:scaleX(0)}
         .nav-burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
-        /* MOBILE MENU */
         .mob-menu{display:flex;position:fixed;inset:0;z-index:490;background:var(--black);flex-direction:column;align-items:flex-start;justify-content:center;padding:0 10vw;gap:2rem;opacity:0;pointer-events:none;transition:opacity 0.4s}
         .mob-menu.on{opacity:1;pointer-events:all}
         .mob-menu a{font-family:var(--f-disp);font-size:clamp(2.5rem,10vw,5rem);color:var(--white);text-decoration:none;transition:color 0.3s}
         .mob-menu a:hover{color:var(--gold)}
         .mob-line{width:100%;height:1px;background:var(--line)}
 
-        /* HERO */
         .hero{height:100svh;min-height:600px;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
         .hero-left{position:relative;overflow:hidden}
-        .hero-left-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(30%) contrast(1.1)}
+        .hero-left-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${heroImagePosition};filter:grayscale(30%) contrast(1.1)}
         .hero-left-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,8,8,0.7) 0%,rgba(8,8,8,0.3) 100%)}
         .hero-right{background:var(--black);display:flex;flex-direction:column;justify-content:flex-end;padding:0 6vw 8vh 5vw;position:relative;overflow:hidden}
         .hero-right::before{content:'';position:absolute;top:0;left:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--gold),transparent)}
@@ -141,20 +148,17 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .hero-scroll-bar{width:40px;height:1px;background:rgba(245,242,238,0.2);position:relative;overflow:hidden}
         .hero-scroll-bar::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--gold);animation:sb 2s ease-in-out infinite}
 
-        /* TICKER */
         .ticker{background:var(--gold);overflow:hidden;padding:0.7rem 0;position:relative;z-index:10}
         .ticker-track{display:flex;white-space:nowrap;animation:tick 18s linear infinite}
         .ticker-item{font-family:var(--f-disp);font-size:1rem;letter-spacing:0.25em;color:var(--black);padding:0 2.5rem;opacity:0.9}
         .ticker-dot{color:var(--black);opacity:0.4}
 
-        /* SECTIONS */
         .s{padding:7rem 5vw}
         .eyebrow{font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem}
         .eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--gold)}
         .h2{font-family:var(--f-disp);font-size:clamp(2.8rem,5.5vw,6rem);line-height:0.9;letter-spacing:0.02em;color:var(--white)}
         .h2 em{font-style:normal;color:var(--gold)}
 
-        /* REVEAL */
         .rv{opacity:0;transform:translateY(48px);transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1),transform 0.9s cubic-bezier(0.16,1,0.3,1)}
         .rv.in{opacity:1;transform:none}
         .rv-l{opacity:0;transform:translateX(-40px);transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1),transform 0.9s cubic-bezier(0.16,1,0.3,1)}
@@ -163,7 +167,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .rv-r.in{opacity:1;transform:none}
         .rv-d1{transition-delay:0.1s}.rv-d2{transition-delay:0.2s}.rv-d3{transition-delay:0.3s}.rv-d4{transition-delay:0.4s}
 
-        /* ABOUT */
         .about{background:var(--black);display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
         .about-media{position:relative;overflow:hidden}
         .about-media-inner{position:absolute;inset:0;display:grid;grid-template-rows:1fr 1fr;gap:2px}
@@ -176,7 +179,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .about-num{font-family:var(--f-disp);font-size:3rem;color:var(--gold);line-height:1}
         .about-num-label{font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(245,242,238,0.4);margin-top:0.4rem}
 
-        /* SERVICES */
         .svs{background:var(--gray)}
         .svs-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem;gap:2rem;flex-wrap:wrap}
         .svs-list{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
@@ -193,7 +195,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .sv-price{font-family:var(--f-mono);font-size:1rem;color:var(--gold);min-width:60px;text-align:right}
         .sv-arrow{font-size:1rem;color:var(--gold);opacity:0;transform:translateX(-8px);transition:all 0.3s}
 
-        /* GALLERY */
         .gal{background:var(--black);padding:7rem 0}
         .gal-head{padding:0 5vw;margin-bottom:3rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
         .gal-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:3px;padding:0 5vw}
@@ -203,7 +204,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .gal-img{width:100%;aspect-ratio:4/5;object-fit:cover;filter:grayscale(30%) contrast(1.05);transition:transform 0.7s cubic-bezier(0.16,1,0.3,1),filter 0.5s}
         .gal-item:hover .gal-img{transform:scale(1.06);filter:grayscale(0%)}
 
-        /* REVIEWS */
         .revs{background:var(--gray)}
         .revs-head{margin-bottom:4rem}
         .revs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
@@ -213,7 +213,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .rev-text{font-size:0.9rem;line-height:1.85;color:rgba(245,242,238,0.8);font-style:italic;margin-bottom:2rem;font-weight:300}
         .rev-author{font-family:var(--f-mono);font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold)}
 
-        /* BOOKING */
         .book{background:var(--black);display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
         .book-left{background:var(--gold);display:flex;flex-direction:column;justify-content:center;padding:5rem 5vw;position:relative;overflow:hidden}
         .book-left::before{content:'BOOK';position:absolute;bottom:-2rem;left:-1rem;font-family:var(--f-disp);font-size:12rem;color:rgba(8,8,8,0.12);line-height:1;pointer-events:none;white-space:nowrap}
@@ -223,7 +222,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .book-info-item{display:flex;align-items:center;gap:1rem;font-family:var(--f-mono);font-size:0.7rem;letter-spacing:0.1em;color:rgba(8,8,8,0.7)}
         .book-right{padding:5rem 5vw;display:flex;flex-direction:column;justify-content:center;border-left:1px solid var(--line)}
 
-        /* FOOTER */
         .foot{background:#040404;padding:4rem 5vw 2.5rem;border-top:1px solid var(--line)}
         .foot-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid var(--line)}
         .foot-brand{font-family:var(--f-disp);font-size:2rem;letter-spacing:0.12em;color:var(--white)}
@@ -241,17 +239,16 @@ const siteName = heroSection.title || cms.hero_title || client.name
         .foot-legal a{font-family:var(--f-mono);font-size:0.55rem;color:rgba(245,242,238,0.2);transition:color 0.3s}
         .foot-legal a:hover{color:rgba(245,242,238,0.5)}
 
-        /* WA */
         .wa{position:fixed;bottom:2rem;right:2rem;z-index:300;width:52px;height:52px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.3);transition:transform 0.3s}
         .wa:hover{transform:scale(1.08)}
         .wa svg{width:24px;height:24px;fill:white}
+        .blog-card{display:block;background:var(--gray);transition:background 0.3s}
+        .blog-card:hover{background:var(--gray2)}
 
-        /* KEYFRAMES */
         @keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
         @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
         @keyframes sb{0%{left:-100%}100%{left:100%}}
 
-        /* ── MOBILE ── */
         @media(max-width:900px){
           html{cursor:auto}
           .cur{display:none}
@@ -296,7 +293,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
 
       <BarberAnimations />
 
-      {/* CURSOR */}
       <div className="cur" id="b-cur">
         <div className="cur-dot" id="b-dot">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c8b89a" strokeWidth="1.2" strokeLinecap="round">
@@ -310,7 +306,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         <div className="cur-ring" id="b-ring"/>
       </div>
 
-      {/* MOBILE MENU */}
       <div className="mob-menu" id="b-mob">
         <div className="mob-line"/>
         <a href="#about">Σχετικά</a>
@@ -323,7 +318,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         <div className="mob-line"/>
       </div>
 
-      {/* NAV */}
       <nav className="nav" id="b-nav">
         <a href="#" className="nav-brand">{siteName}</a>
         <div className="nav-links">
@@ -337,15 +331,14 @@ const siteName = heroSection.title || cms.hero_title || client.name
         </button>
       </nav>
 
-      {/* HERO */}
-      <section className="hero">
+      <section className="hero" aria-label="Hero">
         <div className="hero-left">
           {heroVideo ? (
             <video autoPlay muted loop playsInline style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',filter:'grayscale(30%) contrast(1.1)'}}>
               <source src={heroVideo} type="video/mp4"/>
             </video>
           ) : heroPhoto ? (
-            <img src={heroPhoto} alt={`${siteName} - ${gbp.category || 'Barber Shop'} - ${address}`} className="hero-left-img" fetchPriority="high" decoding="async"/>
+            <img src={heroPhoto} alt={`${siteName} - ${heroEyebrow} - ${address}`} className="hero-left-img" fetchPriority="high" decoding="async" style={{objectPosition:heroImagePosition}}/>
           ) : (
             <div style={{position:'absolute',inset:0,background:'var(--gray2)',display:'flex',alignItems:'center',justifyContent:'center'}}>
               <span style={{fontFamily:'var(--f-disp)',fontSize:'8rem',color:'rgba(245,242,238,0.05)'}}>✂</span>
@@ -365,7 +358,7 @@ const siteName = heroSection.title || cms.hero_title || client.name
         <div className="hero-right">
           <div className="hero-tag">
             <div className="hero-tag-line"/>
-            {cms.hero_eyebrow || gbp.category || 'Barber Shop'}
+            {heroEyebrow}
           </div>
           <h1 className="hero-h1">
             {siteName.toUpperCase().split(' ').map((w: string, i: number) => (
@@ -388,7 +381,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         </div>
       </section>
 
-      {/* TICKER */}
       <div className="ticker">
         <div className="ticker-track">
           {[...Array(10)].map((_,i) => (
@@ -404,19 +396,18 @@ const siteName = heroSection.title || cms.hero_title || client.name
         </div>
       </div>
 
-      {/* ABOUT */}
       <section className="about" id="about" aria-label="Σχετικά με εμάς">
         <div className="about-media rv-l">
           <div className="about-media-inner">
             {philosophy.photo ? (
-              <img src={philosophy.photo} alt={siteName} className="about-img" loading="lazy"/>
+              <img src={philosophy.photo} alt={`${siteName} - Barber Shop ${city}`} className="about-img" loading="lazy"/>
             ) : (
               <div className="about-img-placeholder">
                 <span style={{fontFamily:'var(--f-disp)',fontSize:'6rem',color:'rgba(245,242,238,0.05)'}}>✂</span>
               </div>
             )}
             {philosophy.photo2 && (
-              <img src={philosophy.photo2} alt={siteName} className="about-img" loading="lazy"/>
+              <img src={philosophy.photo2} alt={`${siteName} interior`} className="about-img" loading="lazy"/>
             )}
           </div>
         </div>
@@ -455,7 +446,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
         </div>
       </section>
 
-      {/* SERVICES */}
       {services.length > 0 && (
         <section className="svs s" id="services" aria-label="Υπηρεσίες">
           <div className="svs-head rv">
@@ -485,13 +475,12 @@ const siteName = heroSection.title || cms.hero_title || client.name
         </section>
       )}
 
-      {/* GALLERY */}
       {displayGallery.length > 0 && (
-        <section className="gal" id="gallery" aria-label="Gallery">
+        <section className="gal" id="gallery" aria-label="Gallery φωτογραφιών">
           <div className="gal-head rv">
             <div>
               <div className="eyebrow">Gallery</div>
-              <h2 className="h2">Η Δουλειά <em>Μιλά</em></h2>
+              <h2 className="h2">{galleryTitle} <em>{galleryTitleEm}</em></h2>
             </div>
             <span style={{fontFamily:'var(--f-mono)',fontSize:'0.6rem',letterSpacing:'0.3em',color:'rgba(245,242,238,0.2)',textTransform:'uppercase',alignSelf:'flex-end'}}>
               {displayGallery.length} photos
@@ -500,16 +489,15 @@ const siteName = heroSection.title || cms.hero_title || client.name
           <div className="gal-grid rv rv-d1">
             {displayGallery.slice(0, 6).map((url: string, i: number) => (
               <div key={i} className="gal-item">
-                <img src={url} alt={`${siteName} - ${gbp.category || 'Barber Shop'} ${city} - φωτογραφία ${i+1}`} className="gal-img" loading="lazy"/>
+                <img src={url} alt={`${siteName} - ${heroEyebrow} ${city} - φωτογραφία ${i+1}`} className="gal-img" loading="lazy"/>
               </div>
             ))}
           </div>
         </section>
       )}
 
-      {/* REVIEWS */}
       {reviews.length > 0 && (
-        <section className="revs s" id="reviews" aria-label="Κριτικές">
+        <section className="revs s" id="reviews" aria-label="Κριτικές πελατών">
           <div className="revs-head rv">
             <div className="eyebrow">Κριτικές</div>
             <h2 className="h2">Τι Λένε <em>οι Πελάτες</em></h2>
@@ -526,10 +514,13 @@ const siteName = heroSection.title || cms.hero_title || client.name
         </section>
       )}
 
-      {/* BOOKING */}
       <section className="book" id="booking" aria-label="Κράτηση ραντεβού">
         <div className="book-left rv-l">
-          <h2 className="book-title">ΚΛΕΙΣΕ<br/>ΡΑΝΤΕΒΟΥ<br/>ΣΗΜΕΡΑ</h2>
+          <h2 className="book-title">
+            {ctaTitle.split('\n').map((l: string, i: number) => (
+              <span key={i} style={{display:'block'}}>{l}</span>
+            ))}
+          </h2>
           <p className="book-sub">{todayHours || 'Δευτέρα — Σάββατο'}</p>
           <div className="book-info">
             {phone && (
@@ -551,12 +542,11 @@ const siteName = heroSection.title || cms.hero_title || client.name
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="foot">
         <div className="foot-top">
           <div>
             <div className="foot-brand">{siteName}</div>
-            <div className="foot-tagline">{gbp.category || 'Barber Shop'}</div>
+            <div className="foot-tagline">{heroEyebrow}</div>
           </div>
           <div>
             <div className="foot-col-title">Navigation</div>
@@ -591,8 +581,8 @@ const siteName = heroSection.title || cms.hero_title || client.name
         <div className="foot-bottom">
           <span className="foot-copy">© {new Date().getFullYear()} {siteName}. All rights reserved.</span>
           <div className="foot-legal">
-            <a href={`/${params.clientId}/privacy`}>Πολιτική Απορρήτου</a>
-            <a href={`/${params.clientId}/cookies`}>Cookies</a>
+            <a href="/privacy">Πολιτική Απορρήτου</a>
+            <a href="/cookies">Cookies</a>
           </div>
         </div>
       </footer>
@@ -602,53 +592,6 @@ const siteName = heroSection.title || cms.hero_title || client.name
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </a>
       )}
-
-      <script dangerouslySetInnerHTML={{ __html: `
-        (function(){
-          var nav=document.getElementById('b-nav');
-          window.addEventListener('scroll',function(){
-            if(nav) nav.className=window.scrollY>60?'nav stuck':'nav';
-          },{passive:true});
-
-          var btn=document.getElementById('b-burger');
-          var mob=document.getElementById('b-mob');
-          if(btn&&mob){
-            btn.addEventListener('click',function(){
-              var isOpen=mob.classList.toggle('on');
-              btn.classList.toggle('on');
-              document.body.style.overflow=isOpen?'hidden':'';
-            });
-            mob.querySelectorAll('a').forEach(function(a){
-              a.addEventListener('click',function(){
-                mob.classList.remove('on');
-                btn.classList.remove('on');
-                document.body.style.overflow='';
-                setTimeout(function(){
-                  var h=a.getAttribute('href');
-                  if(h&&h.startsWith('#')){var t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'});}
-                },300);
-              });
-            });
-          }
-
-          var dot=document.getElementById('b-dot');
-          if(dot&&window.matchMedia('(hover:hover)').matches){
-            var mx=0,my=0;
-            document.addEventListener('mousemove',function(e){
-              mx=e.clientX; my=e.clientY;
-              dot.style.left=mx+'px'; dot.style.top=my+'px';
-            });
-          }
-
-          var els=document.querySelectorAll('.rv,.rv-l,.rv-r');
-          var io=new IntersectionObserver(function(entries){
-            entries.forEach(function(e){
-              if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
-            });
-          },{threshold:0.05,rootMargin:'0px 0px -30px 0px'});
-          els.forEach(function(el){io.observe(el);});
-        })();
-      `}}/>
 
       <CookieBanner />
     </>
