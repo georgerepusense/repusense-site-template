@@ -19,6 +19,8 @@ export default async function BarberTemplate({ client }: { client: any }) {
   const cms = client.site_settings || {}
   // Διάβασε από cms_sections αν υπάρχουν
 const sections = client.cms_sections || []
+console.log('cms_sections count:', sections.length)
+console.log('heroSection:', JSON.stringify(heroSection))
 const heroSection = sections.find((s: any) => s.type === 'hero')?.settings || {}
 const aboutSection = sections.find((s: any) => s.type === 'about')?.settings || {}
 const servicesSection = sections.find((s: any) => s.type === 'services')?.settings || {}
@@ -47,13 +49,13 @@ const siteName = heroSection.title || cms.hero_title || client.name
   const whatsapp = cms.whatsapp || phone.replace(/\D/g, '')
 
   const services = [1,2,3,4,5,6,7,8].map(i => ({
-    name: cms[`service_name_${i}`],
-    price: cms[`service_price_${i}`],
-    duration: cms[`service_duration_${i}`],
+    name: servicesSection[`name_${i}`] || cms[`service_name_${i}`],
+    price: servicesSection[`price_${i}`] || cms[`service_price_${i}`],
+    duration: servicesSection[`duration_${i}`] || cms[`service_duration_${i}`],
   })).filter(s => s.name)
 
   const galleryPhotos = [1,2,3,4,5,6,7,8,9]
-    .map(i => cms[`gallery_photo_${i}`])
+    .map(i => gallerySection[`photo_${i}`] || cms[`gallery_photo_${i}`])
     .filter(Boolean)
 
   const displayGallery = galleryPhotos.length > 0
