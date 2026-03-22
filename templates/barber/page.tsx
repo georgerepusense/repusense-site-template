@@ -17,12 +17,26 @@ export default async function BarberTemplate({ client }: { client: any }) {
   const params = { clientId: client.id }
   const gbp = client.gbp_data || {}
   const cms = client.site_settings || {}
+  // Διάβασε από cms_sections αν υπάρχουν
+const sections = client.cms_sections || []
+const heroSection = sections.find((s: any) => s.type === 'hero')?.settings || {}
+const aboutSection = sections.find((s: any) => s.type === 'about')?.settings || {}
+const servicesSection = sections.find((s: any) => s.type === 'services')?.settings || {}
+const gallerySection = sections.find((s: any) => s.type === 'gallery')?.settings || {}
+const bookingSection = sections.find((s: any) => s.type === 'booking')?.settings || {}
+const infoSection = sections.find((s: any) => s.type === 'info')?.settings || {}
+const cmsSeo = client.cms_seo || {}
+
+// Merge — cms_sections έχει προτεραιότητα, fallback στο παλιό site_settings
+const heroPhoto = heroSection.photo || cms.hero_photo || photos[0]?.url || null
+const heroVideo = heroSection.video || cms.hero_video || null
+const heroImagePosition = heroSection.image_position || cms.hero_image_position || 'center'
+const brandColor = heroSection.brand_color || cms.brand_color || '#c8b89a'
+const siteName = heroSection.title || cms.hero_title || client.name
   const photos = (gbp.photos || []).filter((p: any) => p?.url)
   const reviews = (gbp.reviews || []).filter((r: any) => r?.text).slice(0, 6)
   const todayHours = getTodayHours(gbp.hours)
 
-  const heroPhoto = cms.hero_photo || photos[0]?.url || null
-  const heroVideo = cms.hero_video || null
   const rating = gbp.rating || null
   const reviewCount = gbp.review_count || 0
   const address = cms.address || gbp.address || ''
@@ -31,8 +45,6 @@ export default async function BarberTemplate({ client }: { client: any }) {
   const instagram = cms.instagram_url || ''
   const facebook = cms.facebook_url || ''
   const whatsapp = cms.whatsapp || phone.replace(/\D/g, '')
-  const brandColor = cms.brand_color || '#c8b89a'
-  const siteName = cms.hero_title || client.name
 
   const services = [1,2,3,4,5,6,7,8].map(i => ({
     name: cms[`service_name_${i}`],
