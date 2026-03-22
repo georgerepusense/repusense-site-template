@@ -28,12 +28,12 @@ const infoSection = sections.find((s: any) => s.type === 'info')?.settings || {}
 const cmsSeo = client.cms_seo || {}
 
 // Merge — cms_sections έχει προτεραιότητα, fallback στο παλιό site_settings
-const heroPhoto = heroSection.photo || cms.hero_photo || photos[0]?.url || null
+  const photos = (gbp.photos || []).filter((p: any) => p?.url)
+  const heroPhoto = heroSection.photo || cms.hero_photo || photos[0]?.url || null
 const heroVideo = heroSection.video || cms.hero_video || null
 const heroImagePosition = heroSection.image_position || cms.hero_image_position || 'center'
 const brandColor = heroSection.brand_color || cms.brand_color || '#c8b89a'
 const siteName = heroSection.title || cms.hero_title || client.name
-  const photos = (gbp.photos || []).filter((p: any) => p?.url)
   const reviews = (gbp.reviews || []).filter((r: any) => r?.text).slice(0, 6)
   const todayHours = getTodayHours(gbp.hours)
 
