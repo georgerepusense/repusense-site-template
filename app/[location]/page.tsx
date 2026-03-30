@@ -9,6 +9,7 @@ export const revalidate = 2592000
 
 export async function generateStaticParams() {
   const pages = await getSeoPages()
+  console.log('SEO PAGES:', JSON.stringify(pages))
   return pages
     .filter((p: any) => !p.service)
     .map((p: any) => ({ location: p.location }))
