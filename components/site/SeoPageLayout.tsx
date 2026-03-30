@@ -26,8 +26,8 @@ export default function SeoPageLayout({
   const gbp = client.gbp_data || {}
   const brand = cms.brand_color || '#1a1a2e'
   const name = cms.hero_title || client.name
-  const phone = cms.phone || ''
-  const whatsapp = cms.whatsapp || ''
+  const phone = cms.phone ? `+${cms.phone.replace(/^\+/, '')}` : ''
+  const whatsapp = cms.whatsapp ? cms.whatsapp.replace(/^\+/, '') : ''
   const instagram = cms.instagram_url || ''
   const facebook = cms.facebook_url || ''
   const rating = gbp.rating || ''
