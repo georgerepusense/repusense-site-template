@@ -1,7 +1,6 @@
 export async function getClientData() {
   const clientId = process.env.CLIENT_ID || process.env.NEXT_PUBLIC_CLIENT_ID
   const apiKey = process.env.REPUSENSE_API_KEY
-console.log('API KEY exists:', !!apiKey, 'value:', apiKey)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://repusense.vercel.app'
 
   if (!clientId || !apiKey) {
@@ -39,9 +38,7 @@ export async function getSeoPages() {
       next: { revalidate: 2592000 } // 30 days cache
     })
 
-    if (!res.ok) {
-      console.error('getSeoPages response error:', res.status, await res.text())
-      return []
+    if (!res.ok) { return []
     }
 
     const data = await res.json()
@@ -52,8 +49,7 @@ export async function getSeoPages() {
       intro_text: p.content?.intro_text || p.intro_text || null,
       cta_text: p.content?.cta_text || p.cta_text || null,
     })) || []
-  } catch (e) {
-    console.error('getSeoPages error:', e)
+  } catch {
     return []
   }
 }
