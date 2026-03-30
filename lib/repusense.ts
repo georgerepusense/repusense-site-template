@@ -38,7 +38,10 @@ export async function getSeoPages() {
       next: { revalidate: 2592000 } // 30 days cache
     })
 
-    if (!res.ok) return []
+    if (!res.ok) {
+      console.error('getSeoPages response error:', res.status, await res.text())
+      return []
+    }
 
     const data = await res.json()
     return data.pages?.map((p: any) => ({
@@ -48,7 +51,8 @@ export async function getSeoPages() {
       intro_text: p.content?.intro_text || p.intro_text || null,
       cta_text: p.content?.cta_text || p.cta_text || null,
     })) || []
-  } catch {
+  } catch (e) {
+    console.error('getSeoPages error:', e)
     return []
   }
 }
