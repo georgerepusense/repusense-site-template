@@ -1,6 +1,7 @@
 export async function getClientData() {
   const clientId = process.env.CLIENT_ID || process.env.NEXT_PUBLIC_CLIENT_ID
   const apiKey = process.env.REPUSENSE_API_KEY
+console.log('API KEY exists:', !!apiKey, 'value:', apiKey)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://repusense.vercel.app'
 
   if (!clientId || !apiKey) {
