@@ -51,10 +51,13 @@ export default async function LocationPage({ params }: { params: { location: str
     }
   })()
 
+  const brandColor = client.site_settings?.brand_color || '#1a1a2e'
+  
   const heroStyle: React.CSSProperties = {
-    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-    padding: '60px 24px 40px',
+    background: brandColor,
+    padding: '32px 24px',
     textAlign: 'center',
+    borderBottom: `3px solid ${brandColor}`,
   }
 
   const h1Style: React.CSSProperties = {
