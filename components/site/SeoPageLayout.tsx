@@ -155,7 +155,8 @@ export default function SeoPageLayout({
           }}>
             {galleryPhotos.map((photo, i) => (
               <div key={i} style={{ aspectRatio: '4/3', borderRadius: 8, overflow: 'hidden' }}>
-                <img src={photo} alt={`${name} ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy"/>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+<img src={photo} alt={`${name} ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy"/>
               </div>
             ))}
           </div>
@@ -184,7 +185,7 @@ export default function SeoPageLayout({
               }}>
                 <div style={{ color: brand, marginBottom: 8, fontSize: 14 }}>{'★'.repeat(review.rating || 5)}</div>
                 <p style={{ fontSize: 14, color: '#ffffffaa', lineHeight: 1.6, marginBottom: 12 }}>
-                  "{review.text?.slice(0, 150)}{(review.text?.length || 0) > 150 ? '...' : ''}"
+                  &ldquo;{review.text?.slice(0, 150)}{(review.text?.length || 0) > 150 ? '...' : ''}&rdquo;
                 </p>
                 <div style={{ fontSize: 12, color: '#ffffff55' }}>{review.author_name}</div>
               </div>
