@@ -67,7 +67,7 @@ export default function SeoPageLayout({
             </div>
           )}
         </Link>
-        <a href={`tel:${phone}`} style={{
+        <a href={`${process.env.NEXT_PUBLIC_SITE_URL}/#reservation`} style={{
           background: brand,
           color: textColor,
           padding: '10px 20px',
@@ -112,8 +112,8 @@ export default function SeoPageLayout({
           {page.intro_text}
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href={`tel:${phone}`} style={{
-            background: brand,
+          <a href={`${process.env.NEXT_PUBLIC_SITE_URL}/#reservation`} style={{
+  background: brand,
             color: textColor,
             padding: '14px 32px',
             borderRadius: 8,
