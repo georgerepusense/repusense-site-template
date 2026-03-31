@@ -103,6 +103,8 @@ export default function RestaurantTemplate({ client }: { client: any }) {
 return (
     <>
       {heroPhoto && <link rel="preload" as="image" href={heroPhoto} fetchPriority="high"/>}
+      <link rel="preload" as="font" type="font/woff2" crossOrigin="anonymous" 
+  href="https://fonts.gstatic.com/s/cormorantgaramond/v22/co3YmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff2"/>
 
       <style dangerouslySetInnerHTML={{ __html: `
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
