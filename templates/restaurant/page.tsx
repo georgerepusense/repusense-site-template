@@ -3,6 +3,7 @@
 import CookieBanner from '@/components/site/CookieBanner'
 import ReservationForm from '@/components/site/ReservationForm'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Cormorant_Garamond, Cormorant_SC, Jost } from 'next/font/google'
 
 const cormorant = Cormorant_Garamond({ 
@@ -252,13 +253,14 @@ return (
       <div className="hero">
         <div className="hero-bg" style={!heroPhoto ? { background: 'linear-gradient(135deg, #0b1a2e 0%, #1e4976 100%)' } : {}}>
           {heroPhoto && (
-            <img src={heroPhoto} alt="" fetchPriority="high" decoding="async"
-              style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 47%' }}/>
-          )}
+  <Image src={heroPhoto} alt="" fill priority
+    sizes="100vw"
+    style={{ objectFit:'cover', objectPosition:'center 47%' }}/>
+)}
         </div>
         <div className="hero-overlay"/>
         <div className="hero-content">
-          <div className="hero-eyebrow">{heroSection.eyebrow || cms.hero_eyebrow || gbp.category || 'Εστιατόριο'}</div>
+          <div classame="hero-eyebrow">{heroSection.eyebrow || cms.hero_eyebrow || gbp.category || 'Εστιατόριο'}</div>
           <h1 className="hero-title">{renderName(siteName)}</h1>
           <div className="hero-meta">
             {rating && (
