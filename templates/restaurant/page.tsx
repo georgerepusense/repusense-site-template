@@ -260,7 +260,7 @@ return (
         </div>
         <div className="hero-overlay"/>
         <div className="hero-content">
-          <div classame="hero-eyebrow">{heroSection.eyebrow || cms.hero_eyebrow || gbp.category || 'Εστιατόριο'}</div>
+          <div className="hero-eyebrow">{heroSection.eyebrow || cms.hero_eyebrow || gbp.category || 'Εστιατόριο'}</div>
           <h1 className="hero-title">{renderName(siteName)}</h1>
           <div className="hero-meta">
             {rating && (
