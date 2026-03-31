@@ -13,11 +13,14 @@ export default async function MenuPage() {
   const phone = cms.phone || gbp.phone || ''
   const logo = cms.logo || ''
 
-  const menuPhotos = [1,2,3,4,5,6]
-    .map((i: number) => cms[`menu_photo_${i}`])
+  const sections = client.cms_sections || []
+const menuSection = sections.find((s: any) => s.type === 'menu')?.settings || {}
+
+const menuPhotos = [1,2,3,4,5,6]
+    .map((i: number) => menuSection[`photo_${i}`] || cms[`menu_photo_${i}`])
     .filter(Boolean)
 
-  if (menuPhotos.length === 0) notFound()
+if (menuPhotos.length === 0) notFound()
 
   return (
     <>
