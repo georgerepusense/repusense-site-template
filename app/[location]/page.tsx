@@ -4,6 +4,7 @@ import { generateSEO } from '@/lib/seo'
 import type { Metadata } from 'next'
 import BarberTemplate from '@/templates/barber/page'
 import DivingTemplate from '@/templates/diving/page'
+import RestaurantTemplate from '@/templates/restaurant/page'
 import SeoPageLayout from '@/components/site/SeoPageLayout'
 
 export const revalidate = 2592000
@@ -49,8 +50,14 @@ export default async function LocationPage({ params }: { params: { location: str
         case 'Barber Shop':
         case 'Ομορφιά/Κουρεία': return BarberTemplate
         case 'Diving':
-        case 'Κατάδυση': return DivingTemplate
-        default: return BarberTemplate
+      case 'Κατάδυση':
+        return DivingTemplate
+      case 'Restaurant':
+      case 'restaurant':
+      case 'Εστιατόριο':
+        return RestaurantTemplate
+      default:
+        return BarberTemplate
       }
     })()
     return <TemplateComponent client={client} />

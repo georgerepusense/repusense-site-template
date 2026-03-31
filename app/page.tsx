@@ -5,6 +5,7 @@ import { generateSEO, generateSchema } from '@/lib/seo'
 import type { Metadata } from 'next'
 import BarberTemplate from '@/templates/barber/page'
 import DivingTemplate from '@/templates/diving/page'
+import RestaurantTemplate from '@/templates/restaurant/page'
 
 export async function generateMetadata(): Promise<Metadata> {
   const client = await getClientData()
@@ -23,6 +24,10 @@ export default async function Home() {
       case 'Diving':
       case 'Κατάδυση':
         return DivingTemplate
+      case 'Restaurant':
+      case 'restaurant':
+      case 'Εστιατόριο':
+        return RestaurantTemplate
       default:
         return BarberTemplate
     }
