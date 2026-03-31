@@ -27,6 +27,7 @@ export default async function Home() {
       case 'Restaurant':
       case 'restaurant':
       case 'Εστιατόριο':
+      case 'Εστιατόριο/Ταβέρνα':
         return RestaurantTemplate
       default:
         return BarberTemplate

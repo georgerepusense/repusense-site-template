@@ -55,6 +55,7 @@ export default async function LocationPage({ params }: { params: { location: str
       case 'Restaurant':
       case 'restaurant':
       case 'Εστιατόριο':
+      case 'Εστιατόριο/Ταβέρνα':
         return RestaurantTemplate
       default:
         return BarberTemplate
