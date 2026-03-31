@@ -1,6 +1,5 @@
 export const dynamic = 'force-dynamic'
-// app/page.tsx
-import { getClientData } from '@/lib/repusense'
+import { getClientData, getTemplateType } from '@/lib/repusense'
 import { generateSEO, generateSchema } from '@/lib/seo'
 import type { Metadata } from 'next'
 import BarberTemplate from '@/templates/barber/page'
@@ -16,27 +15,17 @@ export default async function Home() {
   const client = await getClientData()
   const schemas = generateSchema(client)
 
-  const TemplateComponent = (() => {
-    switch (client.business_type) {
-      case 'Barber Shop':
-      case 'Ομορφιά/Κουρεία':
-        return BarberTemplate
-      case 'Diving':
-      case 'Κατάδυση':
-        return DivingTemplate
-      case 'Restaurant':
-      case 'restaurant':
-      case 'Εστιατόριο':
-      case 'Εστιατόριο/Ταβέρνα':
-        return RestaurantTemplate
-      default:
-        return BarberTemplate
-    }
-  })()
+  const templates: Record<string, any> = {
+    barber: BarberTemplate,
+    diving: DivingTemplate,
+    restaurant: RestaurantTemplate,
+  }
+
+  const templateType = getTemplateType(client.business_type)
+  const TemplateComponent = templates[templateType] || BarberTemplate
 
   return (
     <>
-      {/* Multiple Schema.org scripts */}
       {schemas.map((schema: any, i: number) => (
         <script
           key={i}

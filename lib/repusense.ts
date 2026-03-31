@@ -53,3 +53,15 @@ export async function getSeoPages() {
     return []
   }
 }
+export function getTemplateType(businessType: string): string {
+  const type = businessType?.toLowerCase() || ''
+  
+  if (type.includes('barber') || type.includes('κουρε') || type.includes('ομορφ')) 
+    return 'barber'
+  if (type.includes('diving') || type.includes('κατάδυ')) 
+    return 'diving'
+  if (type.includes('εστιατ') || type.includes('ταβέρν') || type.includes('restaurant') || type.includes('cafe') || type.includes('καφέ') || type.includes('φαγητ')) 
+    return 'restaurant'
+  
+  return 'barber'
+}

@@ -1,5 +1,5 @@
 // app/[location]/page.tsx
-import { getClientData, getSeoPages } from '@/lib/repusense'
+import { getClientData, getSeoPages, getTemplateType } from '@/lib/repusense'
 import { generateSEO } from '@/lib/seo'
 import type { Metadata } from 'next'
 import BarberTemplate from '@/templates/barber/page'
@@ -43,24 +43,13 @@ export default async function LocationPage({ params }: { params: { location: str
     .filter((p: any) => p.location === params.location && p.service)
     .map((p: any) => ({ label: p.h1 || p.service, href: `/${p.location}/${p.service}` }))
 
-  // Αν δεν υπάρχει SEO page, δείξε κανονικό template
   if (!page) {
-    const TemplateComponent = (() => {
-      switch (client.business_type) {
-        case 'Barber Shop':
-        case 'Ομορφιά/Κουρεία': return BarberTemplate
-        case 'Diving':
-      case 'Κατάδυση':
-        return DivingTemplate
-      case 'Restaurant':
-      case 'restaurant':
-      case 'Εστιατόριο':
-      case 'Εστιατόριο/Ταβέρνα':
-        return RestaurantTemplate
-      default:
-        return BarberTemplate
-      }
-    })()
+    const templates: Record<string, any> = {
+      barber: BarberTemplate,
+      diving: DivingTemplate,
+      restaurant: RestaurantTemplate,
+    }
+    const TemplateComponent = templates[getTemplateType(client.business_type)] || BarberTemplate
     return <TemplateComponent client={client} />
   }
 
