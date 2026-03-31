@@ -73,6 +73,7 @@ export default function RestaurantTemplate({ client }: { client: any }) {
   const reviewCount = gbp.review_count || 0
   const reviews     = (gbp.reviews || []).filter((r: any) => r?.text).slice(0, 3)
   const todayHours  = getTodayHours(gbp.hours)
+  const articles = (client.articles || []).filter((a: any) => a.featured_image_url)
 
   const menuPhotos = [1,2,3,4,5,6].map(i => cms[`menu_photo_${i}`]).filter(Boolean)
 
@@ -332,6 +333,30 @@ return (
         </section>
       )}
 
+      {/* ARTICLES */}
+      {articles.length > 0 && (
+        <section style={{ background: 'var(--salt)', padding: '5rem 8vw' }} id="articles">
+          <div className="section-eyebrow">Άρθρα & Νέα</div>
+          <h2 className="section-title light">Τα Νέα μας</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
+            {articles.slice(0, 3).map((article: any) => (
+              <a key={article.id} href={`/blog/${article.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <div style={{ aspectRatio: '16/9', overflow: 'hidden', background: 'var(--bone)', marginBottom: '1.2rem' }}>
+                  <img src={article.featured_image_url} alt={article.title} loading="lazy"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}/>
+                </div>
+                <div style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.5rem' }}>
+                  {new Date(article.created_at).toLocaleDateString('el-GR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </div>
+                <div style={{ fontFamily: 'var(--f-disp)', fontSize: '1.3rem', lineHeight: 1.3, color: 'var(--ink)' }}>
+                  {article.title}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+      
       {/* GALLERY */}
       {show.gallery && galleryPhotos.length > 0 && (
         <section className="dishes-section" id="dishes">
