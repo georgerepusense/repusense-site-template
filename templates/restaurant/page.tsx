@@ -454,22 +454,6 @@ return (
         </a>
       )}
 
-      <script dangerouslySetInnerHTML={{ __html: `
-        (function() {
-          var btn = document.getElementById('hamburger');
-          var menu = document.getElementById('mobile-menu');
-          var close = document.getElementById('menu-close');
-          if (!btn || !menu) return;
-          btn.addEventListener('click', function() { menu.classList.toggle('open'); btn.classList.toggle('open'); document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : ''; });
-          if (close) close.addEventListener('click', function() { menu.classList.remove('open'); btn.classList.remove('open'); document.body.style.overflow = ''; });
-          menu.querySelectorAll('a').forEach(function(a) {
-            a.addEventListener('click', function() {
-              menu.classList.remove('open'); btn.classList.remove('open'); document.body.style.overflow = '';
-            });
-          });
-        })();
-      `}}/>
-
       <CookieBanner />
     </>
   )
