@@ -13,7 +13,7 @@ export default async function MenuPage() {
   const phone = cms.phone || gbp.phone || ''
   const logo = cms.logo || ''
 
-  const sections = client.cms_sections || []
+const sections = client.cms_sections || []
 const menuSection = sections.find((s: any) => s.type === 'menu')?.settings || {}
 
 const menuPhotos = [1,2,3,4,5,6]
@@ -74,8 +74,8 @@ if (menuPhotos.length === 0) notFound()
 
       <div className="wrap">
         <div className="page-eyebrow">Τι σερβίρουμε</div>
-        <h1 className="page-title">{cms.menu_title || 'Το Μενού μας'}</h1>
-        <p className="page-sub">{cms.menu_subtitle || 'Ανακαλύψτε τις γεύσεις μας'}</p>
+        <h1 className="page-title">{menuSection.title || cms.menu_title || 'Το Μενού μας'}</h1>
+<p className="page-sub">{menuSection.subtitle || cms.menu_subtitle || 'Ανακαλύψτε τις γεύσεις μας'}</p>
         <div className="menu-grid">
           {menuPhotos.map((photo: string, i: number) => (
             <div key={i} className="menu-item">
