@@ -1,5 +1,16 @@
 // templates/restaurant/page.tsx
-import ReservationForm from '@/components/site/ReservationForm'
+// ReservationForm - inline simple version
+function ReservationForm({ phone }: { clientId: string, clientSlug: string, phone: string }) {
+  return (
+    <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
+      {phone && (
+        <a href={`tel:${phone}`} style={{ padding:'14px 32px', background:'var(--gold)', color:'var(--ink)', fontWeight:700, fontSize:14, textDecoration:'none', letterSpacing:'0.1em', textTransform:'uppercase' }}>
+          📞 Τηλεφωνική Κράτηση
+        </a>
+      )}
+    </div>
+  )
+}
 import CookieBanner from '@/components/site/CookieBanner'
 import Link from 'next/link'
 
