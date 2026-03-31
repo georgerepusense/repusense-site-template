@@ -3,6 +3,27 @@
 import CookieBanner from '@/components/site/CookieBanner'
 import ReservationForm from '@/components/site/ReservationForm'
 import Link from 'next/link'
+import { Cormorant_Garamond, Cormorant_SC, Jost } from 'next/font/google'
+
+const cormorant = Cormorant_Garamond({ 
+  subsets: ['latin'], 
+  weight: ['300', '400', '500'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--f-disp'
+})
+const cormorantSC = Cormorant_SC({ 
+  subsets: ['latin'], 
+  weight: ['300', '400'],
+  display: 'swap',
+  variable: '--f-sc'
+})
+const jost = Jost({ 
+  subsets: ['latin'], 
+  weight: ['200', '300', '400'],
+  display: 'swap',
+  variable: '--f-body'
+})
 
 function getTodayHours(hours: any[]) {
   if (!hours?.length) return null
@@ -78,23 +99,18 @@ export default function RestaurantTemplate({ client }: { client: any }) {
     info:        cms.show_info        !== false,
     reservation: cms.show_reservation !== false,
   }
-
-  return (
+return (
     <>
-      <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@300;400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
       {heroPhoto && <link rel="preload" as="image" href={heroPhoto} fetchPriority="high"/>}
 
       <style dangerouslySetInnerHTML={{ __html: `
-        @font-face { font-display: swap; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
           --ink: #0b1a2e; --gold: ${brandColor}; --cream: #fdfaf4;
           --salt: #f4f1eb; --bone: #ede8df; --muted: #8a7e72;
-          --f-disp:'Cormorant Garamond', Georgia, serif;
-          --f-sc: 'Cormorant SC', Georgia, serif;
-          --f-body:'Jost', sans-serif;
+          --f-disp: 'Cormorant Garamond', Georgia, serif;
+--f-sc: 'Cormorant SC', Georgia, serif;
+--f-body: 'Jost', sans-serif;
         }
         html { scroll-behavior: auto; }
         body { font-family: var(--f-body); font-weight: 300; background: var(--cream); color: var(--ink); overflow-x: hidden; }
@@ -209,7 +225,6 @@ export default function RestaurantTemplate({ client }: { client: any }) {
         <a href="/menu">Μενού</a>
         <a href="#philosophy">Φιλοσοφία</a>
         <a href="#info">Πληροφορίες</a>
-        {menuPhotos.length > 0 && <a href="#menu">Μενού</a>}
         <a href="#reservations" className="mobile-cta">ΚΡΑΤΗΣΗ</a>
       </div>
 
@@ -226,7 +241,6 @@ export default function RestaurantTemplate({ client }: { client: any }) {
           <a href="/menu" className="nav-link">Μενού</a>
           <a href="#philosophy" className="nav-link">Φιλοσοφία</a>
           <a href="#info" className="nav-link">Πληροφορίες</a>
-          {menuPhotos.length > 0 && <a href="#menu" className="nav-link">Μενού</a>}
           <a href="#reservations" className="nav-cta">ΚΡΑΤΗΣΗ</a>
         </div>
         <button className="nav-hamburger" id="hamburger">
@@ -453,6 +467,7 @@ export default function RestaurantTemplate({ client }: { client: any }) {
           });
         })();
       `}}/>
+
       <CookieBanner />
     </>
   )
