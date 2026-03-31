@@ -87,23 +87,23 @@ export default function ReservationForm({ clientId, clientSlug, phone }: Props) 
       <div className="res-form">
         <div className="res-grid">
           <div className="res-field">
-            <label className="res-label">Όνομα *</label>
-            <input className="res-input" type="text" placeholder="Το όνομά σας"
+            <label htmlFor="res-name" className="res-label">Όνομα *</label>
+<input id="res-name" className="res-input" type="text" placeholder="Το όνομά σας"
               value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}/>
           </div>
           <div className="res-field">
-            <label className="res-label">Τηλέφωνο *</label>
-            <input className="res-input" type="tel" placeholder="69XXXXXXXX"
+            <label htmlFor="res-phone" className="res-label">Τηλέφωνο *</label>
+<input id="res-phone" className="res-input" type="tel" placeholder="69XXXXXXXX"
               value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}/>
           </div>
           <div className="res-field">
-            <label className="res-label">Email</label>
-            <input className="res-input" type="email" placeholder="email@example.com"
+            <label htmlFor="res-email" className="res-label">Email</label>
+<input id="res-email" className="res-input" type="email" placeholder="email@example.com"
               value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}/>
           </div>
           <div className="res-field">
-            <label className="res-label">Άτομα *</label>
-            <select className="res-input" value={form.party_size}
+            <label htmlFor="res-party" className="res-label">Άτομα *</label>
+<select id="res-party" className="res-input" value={form.party_size}
               onChange={e => setForm(f => ({ ...f, party_size: e.target.value }))}>
               {[1,2,3,4,5,6,7,8,10,12].map(n => (
                 <option key={n} value={n}>{n} {n === 1 ? 'άτομο' : 'άτομα'}</option>
@@ -111,22 +111,22 @@ export default function ReservationForm({ clientId, clientSlug, phone }: Props) 
             </select>
           </div>
           <div className="res-field">
-            <label className="res-label">Ημερομηνία *</label>
-            <input className="res-input" type="date"
+            <label htmlFor="res-date" className="res-label">Ημερομηνία *</label>
+<input id="res-date" className="res-input" type="date"
               min={new Date().toISOString().split('T')[0]}
               value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}/>
           </div>
           <div className="res-field">
-            <label className="res-label">Ώρα *</label>
-            <select className="res-input" value={form.time}
+            <label htmlFor="res-time" className="res-label">Ώρα *</label>
+<select id="res-time" className="res-input" value={form.time}
               onChange={e => setForm(f => ({ ...f, time: e.target.value }))}>
               <option value="">Επιλέξτε ώρα</option>
               {times.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
           <div className="res-field res-field-full">
-            <label className="res-label">Σημειώσεις</label>
-            <textarea className="res-input res-textarea" placeholder="Αλλεργίες, ειδικές απαιτήσεις..."
+            <label htmlFor="res-notes" className="res-label">Σημειώσεις</label>
+<textarea id="res-notes" className="res-input res-textarea" placeholder="Αλλεργίες, ειδικές απαιτήσεις..."
               value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}/>
           </div>
         </div>

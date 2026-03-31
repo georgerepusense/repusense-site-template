@@ -150,6 +150,7 @@ return (
         .section-title.dark { color: white; }
         .section-title.light { color: var(--ink); }
         .philosophy-section { background: var(--cream); }
+        .philosophy-section .section-eyebrow { color: #8a6d3b; }
         .philosophy-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
         .philosophy-text { font-family: var(--f-disp); font-size: 1.15rem; line-height: 1.9; color: var(--ink); font-style: italic; opacity: 0.8; margin-top: 1.5rem; }
         .philosophy-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -244,7 +245,7 @@ return (
           <a href="#info" className="nav-link">Πληροφορίες</a>
           <a href="#reservations" className="nav-cta">ΚΡΑΤΗΣΗ</a>
         </div>
-        <button className="nav-hamburger" id="hamburger">
+        <button className="nav-hamburger" id="hamburger" aria-label="Άνοιγμα μενού">
           <span/><span/><span/>
         </button>
       </nav>
