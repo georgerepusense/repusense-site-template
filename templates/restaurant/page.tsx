@@ -10,19 +10,19 @@ const cormorant = Cormorant_Garamond({
   subsets: ['latin'], 
   weight: ['300', '400', '500'],
   style: ['normal', 'italic'],
-  display: 'swap',
+  display: 'optional',
   variable: '--f-disp'
 })
 const cormorantSC = Cormorant_SC({ 
   subsets: ['latin'], 
   weight: ['300', '400'],
-  display: 'swap',
+  display: 'optional',
   variable: '--f-sc'
 })
 const jost = Jost({ 
   subsets: ['latin'], 
   weight: ['200', '300', '400'],
-  display: 'swap',
+  display: 'optional',
   variable: '--f-body'
 })
 
