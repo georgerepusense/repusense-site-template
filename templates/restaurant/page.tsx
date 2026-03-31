@@ -205,7 +205,7 @@ export default function RestaurantTemplate({ client }: { client: any }) {
       {/* MOBILE MENU */}
       <div className="mobile-menu" id="mobile-menu">
         <button className="mobile-menu-close" id="menu-close">✕</button>
-        {menuPhotos.length > 0 && <a href="/menu">Μενού</a>}
+        <a href="/menu">Μενού</a>
         <a href="#philosophy">Φιλοσοφία</a>
         <a href="#info">Πληροφορίες</a>
         {menuPhotos.length > 0 && <a href="#menu">Μενού</a>}
@@ -222,7 +222,7 @@ export default function RestaurantTemplate({ client }: { client: any }) {
           {gbp.category && <span className="nav-sub">{gbp.category}</span>}
         </a>
         <div className="nav-links">
-          {menuPhotos.length > 0 && <a href="/menu" className="nav-link">Μενού</a>}
+          <a href="/menu" className="nav-link">Μενού</a>
           <a href="#philosophy" className="nav-link">Φιλοσοφία</a>
           <a href="#info" className="nav-link">Πληροφορίες</a>
           {menuPhotos.length > 0 && <a href="#menu" className="nav-link">Μενού</a>}
@@ -402,7 +402,7 @@ export default function RestaurantTemplate({ client }: { client: any }) {
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:'1rem', alignItems:'flex-end' }}>
             <div className="foot-links">
-              {menuPhotos.length > 0 && <a href="/menu" className="foot-link">Μενού</a>}
+              <a href="/menu" className="foot-link">Μενού</a>
               <a href="#philosophy" className="foot-link">Φιλοσοφία</a>
               <a href="#info" className="foot-link">Πληροφορίες</a>
               {mapsUrl && <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="foot-link">Google Maps</a>}
