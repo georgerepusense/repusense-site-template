@@ -111,7 +111,18 @@ return (
   <style dangerouslySetInnerHTML={{ __html: customCss }}/>
 )}
 {customJs && (
-  <script dangerouslySetInnerHTML={{ __html: customJs }}/>
+  <script dangerouslySetInnerHTML={{ __html: `
+    (function() {
+      function waitAndInit() {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          ${customJs}
+        } else {
+          document.addEventListener('DOMContentLoaded', function() { ${customJs} })
+        }
+      }
+      waitAndInit()
+    })()
+  `}}/>
 )}
 
       <style dangerouslySetInnerHTML={{ __html: `
