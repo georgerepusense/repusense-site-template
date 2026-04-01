@@ -93,6 +93,12 @@ if (menuPhotos.length === 0) notFound()
         </div>
       </div>
       <footer><span className="foot-copy">© {new Date().getFullYear()} {siteName}</span></footer>
+      {client.cms_seo?.custom_css && (
+  <style dangerouslySetInnerHTML={{ __html: client.cms_seo.custom_css }}/>
+)}
+{client.cms_seo?.custom_js && (
+  <script dangerouslySetInnerHTML={{ __html: client.cms_seo.custom_js }}/>
+)}
     </>
   )
 }
