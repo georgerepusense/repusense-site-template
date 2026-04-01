@@ -48,6 +48,9 @@ function renderName(name: string) {
 export default function RestaurantTemplate({ client }: { client: any }) {
   const gbp = client.gbp_data || {}
   const cms = client.site_settings || {}
+  const cmsCode = client.cms_seo || {}
+const customCss = cmsCode.custom_css || ''
+const customJs = cmsCode.custom_js || ''
   const sections = client.cms_sections || []
 
   const heroSection    = sections.find((s: any) => s.type === 'hero')?.settings || {}
@@ -104,6 +107,12 @@ export default function RestaurantTemplate({ client }: { client: any }) {
 return (
     <>
       {heroPhoto && <link rel="preload" as="image" href={heroPhoto} fetchPriority="high"/>}
+      {customCss && (
+  <style dangerouslySetInnerHTML={{ __html: customCss }}/>
+)}
+{customJs && (
+  <script dangerouslySetInnerHTML={{ __html: customJs }}/>
+)}
 
       <style dangerouslySetInnerHTML={{ __html: `
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
