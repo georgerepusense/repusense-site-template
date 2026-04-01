@@ -71,15 +71,23 @@ export default function ReservationForm({ clientId, clientSlug, phone }: Props) 
   }
 
   if (status === 'success') {
-    return (
-      <div className="res-success">
-        <div className="res-success-icon">✓</div>
-        <h3 className="res-success-title">Η κράτησή σας καταχωρήθηκε!</h3>
-        <p className="res-success-text">Σας ευχαριστούμε πολύ που μας προτιμήσατε. Θα επιβεβαιώσουμε την κράτησή σας άμεσα!</p>
-        {phone && <a href={`tel:${phone}`} className="res-call-btn">Ή καλέστε μας: {phone}</a>}
-      </div>
-    )
-  }
+  return (
+    <div style={{ textAlign:'center', padding:'3rem 1rem' }}>
+      <div style={{ fontSize:'3rem', marginBottom:'1rem' }}>✓</div>
+      <h3 style={{ fontFamily:'var(--f-disp)', fontSize:'2rem', fontWeight:300, color:'white', marginBottom:'0.75rem', letterSpacing:'0.05em' }}>
+        Η κράτησή σας καταχωρήθηκε!
+      </h3>
+      <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'1rem', fontFamily:'var(--f-disp)', fontStyle:'italic', marginBottom:'1.5rem', lineHeight:1.7 }}>
+        Θα επιβεβαιώσουμε την κράτησή σας άμεσα.<br/>Σας περιμένουμε!
+      </p>
+      {phone && (
+        <a href={`tel:${phone}`} style={{ color:'var(--gold)', borderBottom:'1px solid rgba(201,169,110,0.4)', textDecoration:'none', fontSize:'0.85rem', letterSpacing:'0.1em' }}>
+          Ή καλέστε μας: {phone}
+        </a>
+      )}
+    </div>
+  )
+}
 
   return (
     <>
