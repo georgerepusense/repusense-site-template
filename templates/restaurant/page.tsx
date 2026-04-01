@@ -482,15 +482,17 @@ return (
 
       <CookieBanner />
       <script dangerouslySetInnerHTML={{ __html: `
-  document.getElementById('hamburger').addEventListener('click', function() {
-    document.getElementById('mobile-menu').classList.add('open');
-  });
-  document.getElementById('menu-close').addEventListener('click', function() {
-    document.getElementById('mobile-menu').classList.remove('open');
-  });
-  document.querySelectorAll('.mobile-menu a').forEach(function(a) {
-    a.addEventListener('click', function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('hamburger').addEventListener('click', function() {
+      document.getElementById('mobile-menu').classList.add('open');
+    });
+    document.getElementById('menu-close').addEventListener('click', function() {
       document.getElementById('mobile-menu').classList.remove('open');
+    });
+    document.querySelectorAll('.mobile-menu a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.remove('open');
+      });
     });
   });
 `}}/>
