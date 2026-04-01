@@ -75,7 +75,7 @@ export default function ReservationForm({ clientId, clientSlug, phone }: Props) 
       <div className="res-success">
         <div className="res-success-icon">✓</div>
         <h3 className="res-success-title">Η κράτησή σας καταχωρήθηκε!</h3>
-        <p className="res-success-text">Θα επικοινωνήσουμε μαζί σας σύντομα για επιβεβαίωση.</p>
+        <p className="res-success-text">Σας ευχαριστούμε πολύ που μας προτιμήσατε. Θα επιβεβαιώσουμε την κράτησή σας άμεσα!</p>
         {phone && <a href={`tel:${phone}`} className="res-call-btn">Ή καλέστε μας: {phone}</a>}
       </div>
     )
