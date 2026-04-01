@@ -356,7 +356,7 @@ return (
           </div>
         </section>
       )}
-      
+
       {/* GALLERY */}
       {show.gallery && galleryPhotos.length > 0 && (
         <section className="dishes-section" id="dishes">
@@ -481,6 +481,19 @@ return (
       )}
 
       <CookieBanner />
+      <script dangerouslySetInnerHTML={{ __html: `
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.add('open');
+  });
+  document.getElementById('menu-close').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.remove('open');
+  });
+  document.querySelectorAll('.mobile-menu a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      document.getElementById('mobile-menu').classList.remove('open');
+    });
+  });
+`}}/>
     </>
   )
 }
