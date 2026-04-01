@@ -484,8 +484,8 @@ return (
       <script dangerouslySetInnerHTML={{ __html: `
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('hamburger').addEventListener('click', function() {
-      document.getElementById('mobile-menu').classList.add('open');
-    });
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
     document.getElementById('menu-close').addEventListener('click', function() {
       document.getElementById('mobile-menu').classList.remove('open');
     });
