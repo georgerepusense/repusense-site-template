@@ -434,7 +434,7 @@ return (
       {/* CTA */}
       {show.reservation && (
         <section className="cta-section" id="reservations">
-          <h2 className="cta-title">{bookingSection.cta_title || cms.cta_title || 'Κάντε'} <em>Κράτηση</em></h2>
+          <h2 className="cta-title">Κάντε <em>Κράτηση</em></h2>
           <p className="cta-sub">{todayHours || 'Κλείστε το τραπέζι σας online'}</p>
           <ReservationForm clientId={client.id} clientSlug={client.site_slug} phone={phone}/>
         </section>
