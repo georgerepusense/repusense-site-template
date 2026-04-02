@@ -1,6 +1,7 @@
 // templates/restaurant/page.tsx
 // ReservationForm - inline simple version
 import CookieBanner from '@/components/site/CookieBanner'
+import RestaurantAnimations from '@/components/site/RestaurantAnimations'
 import ReservationForm from '@/components/site/ReservationForm'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -489,22 +490,8 @@ return (
         </a>
       )}
 
+      <RestaurantAnimations />
       <CookieBanner />
-      <script dangerouslySetInnerHTML={{ __html: `
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('hamburger').addEventListener('click', function() {
-  document.getElementById('mobile-menu').classList.toggle('open');
-});
-    document.getElementById('menu-close').addEventListener('click', function() {
-      document.getElementById('mobile-menu').classList.remove('open');
-    });
-    document.querySelectorAll('.mobile-menu a').forEach(function(a) {
-      a.addEventListener('click', function() {
-        document.getElementById('mobile-menu').classList.remove('open');
-      });
-    });
-  });
-`}}/>
     </>
   )
 }
