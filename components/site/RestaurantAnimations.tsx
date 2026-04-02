@@ -5,6 +5,8 @@ export default function RestaurantAnimations() {
   useEffect(() => {
     // ── CURSOR ──────────────────────────────
     if (window.matchMedia('(hover:hover)').matches) {
+        document.documentElement.style.cursor = 'none'
+document.body.style.cursor = 'none'
       let cursor = document.getElementById('r-cursor')
       if (!cursor) {
         cursor = document.createElement('div')

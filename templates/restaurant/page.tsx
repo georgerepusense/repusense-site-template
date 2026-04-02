@@ -108,13 +108,7 @@ const customJs = cmsCode.custom_js || ''
 return (
     <>
       {heroPhoto && <link rel="preload" as="image" href={heroPhoto} fetchPriority="high"/>}
-      {customCss && (
-  <style dangerouslySetInnerHTML={{ __html: customCss }}/>
-)}
-{customJs && (
-  <script dangerouslySetInnerHTML={{ __html: customJs }}/>
-)}
-
+      
       <style dangerouslySetInnerHTML={{ __html: `
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
@@ -490,8 +484,10 @@ return (
         </a>
       )}
 
-      <RestaurantAnimations />
-      <CookieBanner />
+      {customCss && <style dangerouslySetInnerHTML={{ __html: customCss }}/>}
+<RestaurantAnimations />
+<CookieBanner />
+{customJs && <script dangerouslySetInnerHTML={{ __html: customJs }}/>}
     </>
   )
 }
