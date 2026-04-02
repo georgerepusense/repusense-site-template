@@ -485,7 +485,7 @@ return (
       )}
 
       {customCss && <style dangerouslySetInnerHTML={{ __html: customCss }}/>}
-<RestaurantAnimations />
+<RestaurantAnimations cursorEmoji={cmsCode.cursor_emoji || '🐟'} />
 <CookieBanner />
 {customJs && <script dangerouslySetInnerHTML={{ __html: customJs }}/>}
     </>

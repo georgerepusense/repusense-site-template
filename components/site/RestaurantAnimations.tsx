@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 
-export default function RestaurantAnimations() {
+export default function RestaurantAnimations({ cursorEmoji = '🐟' }: { cursorEmoji?: string }) {
   useEffect(() => {
     // ── CURSOR ──────────────────────────────
     if (window.matchMedia('(hover:hover)').matches) {
@@ -11,7 +11,7 @@ document.body.style.cursor = 'none'
       if (!cursor) {
         cursor = document.createElement('div')
         cursor.id = 'r-cursor'
-        cursor.innerHTML = '🐟'
+        cursor.innerHTML = cursorEmoji
         cursor.style.cssText = 'position:fixed;top:0;left:0;font-size:22px;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:transform 0.15s ease;will-change:left,top;'
         document.body.appendChild(cursor)
       }
