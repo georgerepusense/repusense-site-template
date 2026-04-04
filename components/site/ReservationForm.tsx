@@ -13,11 +13,12 @@ export default function ReservationForm({ clientId }: Props) {
     <iframe
       src={`${apiUrl}/widget/bookings/${clientId}`}
       style={{
-        width: '100%',
-        minHeight: '600px',
-        border: 'none',
-        borderRadius: '8px',
-      }}
+  width: '100%',
+  height: '100vh',
+  border: 'none',
+  borderRadius: '8px',
+  display: 'block',
+}}
       title="Κράτηση"
     />
   )
