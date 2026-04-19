@@ -209,7 +209,7 @@ export default function Page() {
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             
             <a href="/https://www.anemoiaevia.com/#reservations" style={{ padding: '8px 16px', background: '#f1f5f9', borderRadius: 8, fontSize: 14, color: '#1e40af', textDecoration: 'none', fontWeight: 500 }}>
-              Κάντε Κράτηση Τώρα
+              Κάντε Κράτηση Τώρα!
             </a>
           </div>
         </nav>
