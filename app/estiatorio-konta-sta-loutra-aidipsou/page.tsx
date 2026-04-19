@@ -208,11 +208,8 @@ export default function Page() {
           <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: '#475569' }}>Δείτε επίσης</h3>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             
-            <a href="//menu" style={{ padding: '8px 16px', background: '#f1f5f9', borderRadius: 8, fontSize: 14, color: '#1e40af', textDecoration: 'none', fontWeight: 500 }}>
-              Δείτε το μενού μας
-            </a>
-            <a href="//contact" style={{ padding: '8px 16px', background: '#f1f5f9', borderRadius: 8, fontSize: 14, color: '#1e40af', textDecoration: 'none', fontWeight: 500 }}>
-              Επικοινωνήστε μαζί μας
+            <a href="/https://www.anemoiaevia.com/#reservations" style={{ padding: '8px 16px', background: '#f1f5f9', borderRadius: 8, fontSize: 14, color: '#1e40af', textDecoration: 'none', fontWeight: 500 }}>
+              Κάντε Κράτηση Τώρα
             </a>
           </div>
         </nav>
